@@ -1,0 +1,9 @@
+{
+  "name": "Karanveer Singh Engineering Portfolio",
+  "short_name": "KS Engineering",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f4f1e9",
+  "theme_color": "#0c2942",
+  "icons": []
+}
