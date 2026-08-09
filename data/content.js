@@ -20,8 +20,8 @@ window.PORTFOLIO_DATA = {
       { label: "Medium", href: "https://medium.com/@ks683557" }
     ],
     portrait: {
-      src: "assets/images/lab-portrait.webp",
-      alt: "Engineering student standing beside laboratory test equipment"
+      src: "assets/images/professional-headshot.webp",
+      alt: "Professional portrait of Karanveer Singh"
     },
     heroImages: [
       { src: "assets/images/robot-window-front-clean.webp", alt: "Front view of a small mobile robot prototype" },

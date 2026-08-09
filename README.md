@@ -1,4 +1,4 @@
-# Engineering Portfolio of Karanveer Singh
+# Karanveer Singh — Engineering Portfolio
 
 Production-ready static portfolio for jobs, placements, research and technical collaboration.
 

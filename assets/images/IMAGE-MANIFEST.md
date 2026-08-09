@@ -1,18 +1,14 @@
 # Image manifest
 
-All images in this directory were derived from photographs supplied by the portfolio owner.
+All photographs in this directory were supplied by the portfolio owner and are used as project or personal evidence.
 
-- `hero-engineering-evidence.webp`: collage of robot prototype, oscilloscope capture and analogue breadboard.
-- `robot-platform-cover.webp`, `robot-platform-prototype.webp`: mobile robot platform.
-- `embedded-sensing-cover.webp`: room-scale embedded prototype.
-- `light-sensor-led-prototype.webp`: light-sensor/LED breadboard experiment.
-- `ultrasonic-alert-prototype.webp`: ultrasonic sensor and buzzer prototype.
-- `ultrasonic-threshold-code.webp`: Arduino threshold logic.
-- `smart-room-integration-*.webp`: integrated room demonstrator.
-- `analogue-communications-cover.webp`: analogue circuit cover crop.
-- `analogue-stage-*.webp`: staged breadboard development.
-- `analogue-system-breadboards.webp`: connected test setup.
-- `oscilloscope-capture-*.webp`: raw waveform evidence; captions avoid unsupported numerical interpretation.
-- `analogue-final-breadboard.webp`: later integrated circuit.
+## Identity images
 
-The supplied portrait/lab photograph was not published in this version.
+- `professional-headshot.webp` — professional portrait used **only** in the About Me section.
+- `lab-portrait.webp` — original laboratory photograph used for practical-lab / Formula Student context and the visual archive.
+
+These are deliberately separate files so replacing the professional portrait does not change the laboratory evidence image.
+
+## Project evidence
+
+The remaining `.webp` files contain robot-platform photographs, breadboard builds, sensing prototypes, oscilloscope captures, component photographs and integration evidence used throughout the project case studies and visual archive.
