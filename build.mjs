@@ -53,7 +53,7 @@ const personLd = {
   url: siteUrl,
   affiliation: { '@type': 'CollegeOrUniversity', name: data.profile.organisation },
   sameAs: data.profile.links.map(link => link.href),
-  knowsAbout: data.skills.flatMap(group => [group.title, ...group.items])
+  knowsAbout: data.skills.flatMap(group => [group.title, group.description].filter(Boolean))
 };
 
 const homeTitle = `${data.profile.name} | Electrical & Electronic Engineering Portfolio`;

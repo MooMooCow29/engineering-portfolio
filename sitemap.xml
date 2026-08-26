@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://moomoocow29.github.io/engineering-portfolio/</loc></url>
+  <url><loc>https://moomoocow29.github.io/engineering-portfolio/projects/aurora-vx/</loc></url>
+  <url><loc>https://moomoocow29.github.io/engineering-portfolio/projects/iaea-uranium-initiative/</loc></url>
   <url><loc>https://moomoocow29.github.io/engineering-portfolio/projects/advanced-2wd-robot-controller/</loc></url>
+  <url><loc>https://moomoocow29.github.io/engineering-portfolio/projects/formula-student-electrical/</loc></url>
+  <url><loc>https://moomoocow29.github.io/engineering-portfolio/projects/pysignalscope/</loc></url>
+  <url><loc>https://moomoocow29.github.io/engineering-portfolio/projects/autonomous-drone-systems/</loc></url>
+  <url><loc>https://moomoocow29.github.io/engineering-portfolio/projects/emg-controlled-rc-car/</loc></url>
+  <url><loc>https://moomoocow29.github.io/engineering-portfolio/projects/self-driving-rc-car/</loc></url>
+  <url><loc>https://moomoocow29.github.io/engineering-portfolio/projects/obstacle-avoidance-robot/</loc></url>
   <url><loc>https://moomoocow29.github.io/engineering-portfolio/projects/analogue-communications-prototype/</loc></url>
   <url><loc>https://moomoocow29.github.io/engineering-portfolio/projects/embedded-sensing-prototypes/</loc></url>
-  <url><loc>https://moomoocow29.github.io/engineering-portfolio/projects/formula-student-electrical/</loc></url>
-  <url><loc>https://moomoocow29.github.io/engineering-portfolio/projects/autonomous-drone-systems/</loc></url>
-  <url><loc>https://moomoocow29.github.io/engineering-portfolio/projects/energy-harvesting-epaper/</loc></url>
   <url><loc>https://moomoocow29.github.io/engineering-portfolio/projects/pipe-climbing-robot/</loc></url>
+  <url><loc>https://moomoocow29.github.io/engineering-portfolio/projects/explainable-dementia-ai/</loc></url>
+  <url><loc>https://moomoocow29.github.io/engineering-portfolio/projects/rf-energy-harvesting-bci/</loc></url>
+  <url><loc>https://moomoocow29.github.io/engineering-portfolio/projects/nuffield-vtol-performance-study/</loc></url>
+  <url><loc>https://moomoocow29.github.io/engineering-portfolio/projects/c-mega-calculator/</loc></url>
+  <url><loc>https://moomoocow29.github.io/engineering-portfolio/projects/uea-innovators-autonomous-polo/</loc></url>
+  <url><loc>https://moomoocow29.github.io/engineering-portfolio/projects/healthbridge-healthbot/</loc></url>
 </urlset>
