@@ -1,4 +1,4 @@
-# Karanveer Singh — Engineering Portfolio
+# Karanveer Singh | Engineering Portfolio
 
 Static GitHub Pages portfolio for electrical, electronic, embedded, control and research projects.
 
