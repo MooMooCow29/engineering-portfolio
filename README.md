@@ -17,10 +17,11 @@ The portfolio is maintained as an evidence-led engineering record rather than a 
 - PCBWay-sponsored controller PCB with manufacturing release complete and physical bring-up next.
 - MEng dissertation: energy-harvesting circuit to power electronic-paper badges.
 - Merged upstream contribution to `upb-lea/pySignalScope`.
+- EEG seizure-detection uncertainty-evaluation research prototype with automated tests and Monte Carlo evidence.
 
 ## Content model
 
-The detailed project archive lives in `data/content.js`. Current factual/status corrections that must override older project snapshots live in `data/updates.js`, with small recent external-achievement updates in `data/recent-projects.js`.
+The detailed project archive lives in `data/content.js`. Current factual/status corrections that must override older project snapshots live in `data/updates.js`. Recent externally validated work, newer research case studies, featured-project ordering and curated writing links live in `data/recent-projects.js`.
 
 Each project can contain:
 
@@ -46,13 +47,19 @@ Do not convert a planned test into a completed claim merely to make the portfoli
 
 ## Build
 
-After changing the content model or current override layer:
+After changing any content layer:
 
 ```bash
 node build.mjs
 ```
 
-The build loads `data/content.js` and then applies `data/updates.js` before regenerating permanent project pages, metadata, sitemap and robots files. Runtime pages also load the current update layers so displayed project status remains consistent.
+The build loads the layers in this order:
+
+1. `data/content.js`
+2. `data/updates.js`
+3. `data/recent-projects.js`
+
+It then regenerates permanent project pages, metadata, sitemap and robots files. Runtime pages load the same layers in the same order so displayed project status remains consistent with future rebuilds.
 
 ## GitHub Pages
 
