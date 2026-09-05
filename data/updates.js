@@ -45,6 +45,71 @@
     innovators.summary = "Vice-President supporting engineering micro-projects, electronics activity, hackathon planning, fundraising and the society’s technical direction; helping shift effort toward deliverable prototypes before returning to larger autonomy ambitions.";
   }
 
+  // PCBWay-sponsored Advanced 2WD Robot: align public claims with the final Revision A architecture and release evidence.
+  const robot = findProject("advanced-2wd-robot-controller");
+  if (robot) {
+    robot.status = "Manufacturing release complete — physical bring-up next";
+    robot.summary = "PCBWay-sponsored redesign of a non-functional two-wheel robot into a modular controller/interface board. Revision A deliberately keeps high-current motor switching off the custom PCB, using a removable Nano ESP32, external Cytron MDD3A, protected logic power and conditioned encoder/sensor interfaces.";
+    robot.challenge = "The main risk was not drawing a schematic; it was deciding what Revision A should refuse to integrate. The original robot could not be used to measure motor current, so an onboard H-bridge and motor-power stage would have forced unverified current, thermal and switching assumptions into the first sponsored board.";
+    robot.approach = "Re-architect the first revision around a low-risk controller/interface PCB. Keep motor current in the battery harness and external MDD3A, use a removable Nano ESP32, design for a 6-cell NiMH supply, condition encoder signals, preserve expansion/test access and release only after explicit schematic, layout, DRC and manufacturing-file gates.";
+    robot.testing = "Design-release evidence is complete; successful physical hardware is not yet claimed. The next stage is current-limited, rail-by-rail bring-up followed by Nano/encoder/sensor checks, MDD3A interface validation and a defined 3 m closed-loop straight-line test.";
+    robot.impact = "The project demonstrates architecture revision based on evidence rather than attachment to an earlier concept: integration was reduced to improve first-revision risk, testability and recoverability. PCBWay sponsorship reduces the PCB manufacturing cost to zero while physical bring-up remains the next proof point.";
+    robot.contribution = "Requirements, architecture revision, component/footprint selection, custom footprints, schematic capture, placement, routing, DRC/release audit, Gerber/Excellon review, test strategy and public technical documentation.";
+    robot.decisions = [
+      "Keep high-current motor switching on an external Cytron MDD3A so motor current does not traverse the custom PCB.",
+      "Use a removable Arduino Nano ESP32 for Wi-Fi/BLE/USB-C access and recoverability during bring-up.",
+      "Move from the earlier 2S LiPo/integrated-driver concept to a 6-cell 7.2 V NiMH controller/interface architecture.",
+      "Preserve test points, antenna keep-out and connector access rather than optimising only for compactness."
+    ];
+    robot.nextSteps = [
+      "Complete sponsor manufacture/assembly and inspect the received PCB before applying power.",
+      "Perform current-limited power-up and verify protected input, Nano supply and logic rails.",
+      "Validate encoder conditioning, ultrasonic/expansion interfaces and external MDD3A control one subsystem at a time.",
+      "Run the 3.0 m straight-line acceptance test: at least 4/5 runs within 100 mm lateral final-position error; 5/5 engineering target."
+    ];
+    robot.skills = ["PCB design", "KiCad", "Embedded systems", "Design for test", "Power/interface architecture", "Robotics", "Verification gating"];
+    robot.facts = [
+      { label: "Controller", value: "Removable Arduino Nano ESP32" },
+      { label: "Motor power stage", value: "External Cytron MDD3A — no motor current on the custom PCB" },
+      { label: "Logic battery basis", value: "6-cell NiMH, 7.2 V nominal; 6–9 V design range" },
+      { label: "Protection", value: "30R110 PPTC + AO3407A reverse-polarity stage" },
+      { label: "Encoder interface", value: "Quadrature feedback via SN74LVC14A Schmitt-trigger conditioning" },
+      { label: "PCB", value: "95 × 55 mm, 2 layers, 70 footprints, 133 vias" },
+      { label: "Release evidence", value: "0 unconnected pads; 0 footprint errors; audited Gerber/Excellon outputs" },
+      { label: "Next evidence", value: "Physical bring-up + 3 m closed-loop motion test" }
+    ];
+    robot.caseStudySections = [
+      {
+        title: "Why the architecture changed",
+        intro: "The earlier concept integrated the motor driver and regulated motor power onto the custom PCB. That looked cleaner, but the original robot was non-functional, so I did not have measured stall-current or transient data for the fitted motors. Revision A therefore removes the highest-current uncertainty from the board instead of pretending it has been validated."
+      },
+      {
+        title: "Final Revision A partition",
+        intro: "The custom PCB handles controller power, signal conditioning, sensing, expansion and the logic interface to the motors. The Cytron MDD3A carries the motor current externally. This reduces thermal/routing risk while still leaving substantial electronics work on the board."
+      },
+      {
+        title: "Removable Nano ESP32",
+        intro: "The controller changed from the earlier classic-Nano idea to an Arduino Nano ESP32. It provides Wi-Fi, Bluetooth LE and USB-C while remaining removable, so a processor fault or firmware recovery problem does not automatically scrap the PCB."
+      },
+      {
+        title: "Power and protection",
+        intro: "Revision A is based on an external six-cell 7.2 V NiMH battery with a 6–9 V design range. A protected logic branch uses a resettable PPTC and reverse-polarity MOSFET stage; high-current motor power remains outside the board."
+      },
+      {
+        title: "Release evidence",
+        intro: "The selected routed candidate passed the project’s power-net and bypass-placement audits. Final documented board metrics include 70 footprints, 133 vias and 776 track segments, with zero unconnected pads and zero footprint errors. Gerber and Excellon outputs were inspected before sponsor release."
+      },
+      {
+        title: "Physical acceptance gate",
+        intro: "Manufacturing release is not the same as a working robot. Bring-up will be staged under current limiting, then progress through controller, encoders, sensors and MDD3A control before closed-loop motion. The primary straight-line test is 3.0 m at moderate speed with at least four of five runs stopping within 100 mm lateral error at the final position."
+      },
+      {
+        title: "Claim boundary",
+        intro: "The portfolio claims a completed design/manufacturing release, not successful physical bring-up. Rail behaviour, encoder performance and closed-loop motion remain future measured evidence."
+      }
+    ];
+  }
+
   // Replace the superseded RF/BCI dissertation concept with the formal ePaper project.
   const dissertation = findProject("rf-energy-harvesting-bci") || findProject("energy-harvesting-epaper");
   if (dissertation) {
