@@ -6,14 +6,17 @@ import { fileURLToPath } from 'node:url';
 const root = path.dirname(fileURLToPath(import.meta.url));
 const dataPath = path.join(root, 'data', 'content.js');
 const updatesPath = path.join(root, 'data', 'updates.js');
+const recentProjectsPath = path.join(root, 'data', 'recent-projects.js');
 const code = fs.readFileSync(dataPath, 'utf8');
 const updatesCode = fs.readFileSync(updatesPath, 'utf8');
+const recentProjectsCode = fs.readFileSync(recentProjectsPath, 'utf8');
 const sandbox = { window: {} };
 vm.createContext(sandbox);
 vm.runInContext(code, sandbox);
 vm.runInContext(updatesCode, sandbox);
+vm.runInContext(recentProjectsCode, sandbox);
 const data = sandbox.window.PORTFOLIO_DATA;
-if (!data) throw new Error('PORTFOLIO_DATA was not found after loading data/content.js and data/updates.js');
+if (!data) throw new Error('PORTFOLIO_DATA was not found after loading the portfolio data/update layers');
 
 const siteUrl = data.profile.siteUrl.endsWith('/') ? data.profile.siteUrl : `${data.profile.siteUrl}/`;
 const social = `${siteUrl}assets/social-preview.jpg`;
@@ -143,7 +146,7 @@ fs.writeFileSync(path.join(root, 'sitemap.xml'), sitemap);
 fs.writeFileSync(path.join(root, 'robots.txt'), `User-agent: *\nAllow: /\nSitemap: ${siteUrl}sitemap.xml\n`);
 fs.writeFileSync(path.join(root, '.nojekyll'), '');
 
-// Validate local assets referenced by the data model.
+// Validate local assets referenced by the current data model.
 const missing = [];
 for (const file of [data.profile.cv, data.profile.portrait.src, ...data.profile.heroImages.map(i => i.src), ...data.projects.flatMap(p => [p.coverImage, ...p.gallery.map(g => g.src)]).filter(Boolean), ...data.archiveGroups.flatMap(g => g.images.map(i => i.src))]) {
   if (!file) continue;
