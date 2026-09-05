@@ -134,6 +134,19 @@ for (const project of data.projects) {
   fs.writeFileSync(path.join(dir, 'index.html'), html);
 }
 
+// Preserve old public URLs that may exist in CVs, search indexes or messages.
+const projectAliases = {
+  'rf-energy-harvesting-bci': 'energy-harvesting-epaper'
+};
+for (const [oldId, newId] of Object.entries(projectAliases)) {
+  const dir = path.join(projectsRoot, oldId);
+  fs.mkdirSync(dir, { recursive: true });
+  const target = `../${newId}/`;
+  const canonical = `${siteUrl}projects/${newId}/`;
+  const html = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta name="robots" content="noindex,follow"><meta http-equiv="refresh" content="0; url=${target}"><link rel="canonical" href="${canonical}"><title>Project moved | ${data.profile.name}</title></head><body><p>This earlier project direction has been superseded. <a href="${target}">Open the current project.</a></p><script>location.replace(${JSON.stringify(target)});</script></body></html>`;
+  fs.writeFileSync(path.join(dir, 'index.html'), html);
+}
+
 const legacy = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Project redirect</title><link rel="stylesheet" href="assets/styles.css"></head><body><main class="container" style="padding:4rem 0"><div class="empty-state deco-frame"><h1 class="project-title">Redirecting…</h1><p class="project-subcopy">This project URL has moved to a cleaner permanent address.</p><a class="btn btn-primary" href="index.html#projects">Project index</a></div></main><script>const id=new URLSearchParams(location.search).get('id');if(id){location.replace('projects/'+encodeURIComponent(id)+'/');}</script></body></html>`;
 fs.writeFileSync(path.join(root, 'project.html'), legacy);
 
