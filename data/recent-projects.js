@@ -153,4 +153,56 @@
     .map((project, index) => ({ project, index }))
     .sort((a, b) => (rank.get(a.project.id) ?? 1000 + a.index) - (rank.get(b.project.id) ?? 1000 + b.index))
     .map(({ project }) => project);
+
+  // Curated writing: direct article links only, prioritising technical depth and relevance.
+  data.writing = [
+    {
+      title: "PID Control from First Principles",
+      category: "Control systems",
+      description: "A first-principles treatment of proportional, integral and derivative control, connecting the mathematics to practical implementation.",
+      href: "https://medium.com/gitconnected/pid-control-from-first-principles-the-mathematics-the-intuition-and-the-code-that-makes-your-653a475fe6b0"
+    },
+    {
+      title: "Feedforward Control — The Missing Half of Every PID Tutorial",
+      category: "Control systems",
+      description: "Why feedback must react after an error appears, and how feedforward changes the architecture when disturbances can be measured or predicted.",
+      href: "https://medium.com/gitconnected/feedforward-control-the-missing-half-of-every-pid-tutorial-you-have-ever-read-d70be69757ad"
+    },
+    {
+      title: "Power Electronics in Modern Energy Systems",
+      category: "Power electronics",
+      description: "Converters, switching losses, grid interfaces, HVDC, thermal limits and wide-bandgap devices as the hidden layer behind modern energy systems.",
+      href: "https://medium.com/@ks683557/power-electronics-in-modern-energy-systems-the-hidden-layer-behind-clean-power-e7b4012b6ae0"
+    },
+    {
+      title: "Why Power Grids Don’t Collapse",
+      category: "Power systems & control",
+      description: "Grid inertia, governor response, network redundancy and the control layers that keep supply and demand synchronised.",
+      href: "https://medium.com/@ks683557/why-power-grids-dont-collapse-even-when-millions-turn-things-on-6295fdc909ba"
+    },
+    {
+      title: "How Fly-By-Wire Makes Fighter Jets Unstable on Purpose",
+      category: "Control & systems engineering",
+      description: "A systems-level explanation of active stability, feedback control, redundancy and the electrical/software architecture behind high-performance aircraft.",
+      href: "https://medium.com/@ks683557/how-fly-by-wire-makes-fighter-jets-unstable-on-purpose-b79162245cea"
+    },
+    {
+      title: "Why Fighter Jets Are Engineering Compromises",
+      category: "Systems engineering",
+      description: "Using aircraft design to explain coupled trade-offs between performance, stealth, range, sensors, power, cooling and cost.",
+      href: "https://medium.com/@ks683557/why-fighter-jets-are-engineering-compromises-not-flying-superheroes-e979950133d3"
+    },
+    {
+      title: "The Tech Frontiers: Real-World Science Behind the Next Great Leap",
+      category: "Future technology",
+      description: "A survey of emerging engineering directions including advanced energy, post-silicon computing and converging deep technologies.",
+      href: "https://medium.com/@ks683557/the-tech-frontiers-real-world-science-behind-the-next-great-leap-6c7ff34ac6d9"
+    },
+    {
+      title: "Matrices — A Short Metaphysical Analysis",
+      category: "Engineering mathematics",
+      description: "Matrices as transformations and compact representations of coupled engineering systems, with an emphasis on intuition rather than rote notation.",
+      href: "https://medium.com/@ks683557/matrices-a-short-metaphysical-analysis-9a4db53d7563"
+    }
+  ];
 })();
