@@ -5,12 +5,15 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 const dataPath = path.join(root, 'data', 'content.js');
+const updatesPath = path.join(root, 'data', 'updates.js');
 const code = fs.readFileSync(dataPath, 'utf8');
+const updatesCode = fs.readFileSync(updatesPath, 'utf8');
 const sandbox = { window: {} };
 vm.createContext(sandbox);
 vm.runInContext(code, sandbox);
+vm.runInContext(updatesCode, sandbox);
 const data = sandbox.window.PORTFOLIO_DATA;
-if (!data) throw new Error('PORTFOLIO_DATA was not found in data/content.js');
+if (!data) throw new Error('PORTFOLIO_DATA was not found after loading data/content.js and data/updates.js');
 
 const siteUrl = data.profile.siteUrl.endsWith('/') ? data.profile.siteUrl : `${data.profile.siteUrl}/`;
 const social = `${siteUrl}assets/social-preview.jpg`;
@@ -74,6 +77,9 @@ const indexHtml = `<!DOCTYPE html>
     <footer class="site-footer" id="footer"></footer>
   </div>
   <script src="data/content.js"></script>
+  <script src="data/updates.js"></script>
+  <script src="data/recent-projects.js"></script>
+  <script src="data/cv-link.js"></script>
   <script src="assets/app.js"></script>
 </body>
 </html>\n`;
@@ -117,6 +123,8 @@ for (const project of data.projects) {
   </div>
   <script>window.PROJECT_ID=${JSON.stringify(project.id)};window.SITE_BASE="../../";</script>
   <script src="../../data/content.js"></script>
+  <script src="../../data/updates.js"></script>
+  <script src="../../data/recent-projects.js"></script>
   <script src="../../assets/project.js"></script>
 </body>
 </html>\n`;
