@@ -131,8 +131,8 @@
   // Employer/research-facing hierarchy: lead with depth, external validation and current work.
   const featuredIds = new Set([
     "advanced-2wd-robot-controller",
-    "aurora-vx",
     "energy-harvesting-epaper",
+    "aurora-vx",
     "szcore-uncertainty-extension",
     "formula-student-electrical",
     "pysignalscope"
@@ -141,8 +141,8 @@
 
   const priority = [
     "advanced-2wd-robot-controller",
-    "aurora-vx",
     "energy-harvesting-epaper",
+    "aurora-vx",
     "szcore-uncertainty-extension",
     "formula-student-electrical",
     "pysignalscope",
@@ -156,6 +156,12 @@
 
   // Curated writing: direct article links only, prioritising technical depth and relevance.
   data.writing = [
+{
+    "title": "I Designed a Custom Robot Controller PCB from Scratch",
+    "category": "PCB design and manufacture",
+    "description": "Robot teardown, rejected architectures and routing candidates, manufactured bare boards and incoming inspection in the PCBWay-sponsored project.",
+    "href": "https://medium.com/@ks683557/i-designed-a-custom-robot-controller-pcb-from-scratch-fc130351fc59"
+},
     {
       title: "PID Control from First Principles",
       category: "Control systems",

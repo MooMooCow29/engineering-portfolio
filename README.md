@@ -11,11 +11,11 @@ The portfolio is maintained as an evidence-led engineering record rather than a 
 - Third-year MEng Electrical & Electronic Engineering, University of East Anglia.
 - 70.5% Year 2 average (First-class level).
 - MBDA Electronics Engineering internship completed in 2026; graduate offer received following the placement.
-- Electrical Systems Lead, Formula Student UEA.
+- Electrical Systems Lead, Formula Student UEA, 2025-2026.
 - Vice-President, UEA Innovators.
 - IAEA Global Virtual Student Challenge finalist.
-- PCBWay-sponsored controller PCB with manufacturing release complete and physical bring-up next.
-- MEng dissertation: energy-harvesting circuit to power electronic-paper badges.
+- PCBWay-sponsored controller PCB: five bare boards manufactured, 32 selected unpowered incoming checks complete; assembly and powered testing next.
+- MEng dissertation: one 4.2-inch wirelessly powered ePaper conference badge; 2.9-inch programmed module baseline demonstrated, raw-panel and batteryless development next.
 - Merged upstream contribution to `upb-lea/pySignalScope`.
 - EEG seizure-detection uncertainty-evaluation research prototype with automated tests and Monte Carlo evidence.
 
@@ -64,3 +64,7 @@ It then regenerates permanent project pages, metadata, sitemap and robots files.
 ## GitHub Pages
 
 Publish the repository from the `main` branch and `/(root)` in GitHub Pages settings.
+
+## Latest project update
+
+The homepage leads with the PCBWay-sponsored board and a responsive collage of original article images. The collage preserves the manufactured board, routing candidates, robot-platform comparison, teardown and unpowered probing as separate images with descriptive captions. The published case study is linked from the homepage, project record and writing section. The dissertation follows the October 2026 single-badge plan.

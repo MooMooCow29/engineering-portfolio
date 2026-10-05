@@ -128,6 +128,7 @@ for (const project of data.projects) {
   <script src="../../data/content.js"></script>
   <script src="../../data/updates.js"></script>
   <script src="../../data/recent-projects.js"></script>
+  <script src="../../data/cv-link.js"></script>
   <script src="../../assets/project.js"></script>
 </body>
 </html>\n`;

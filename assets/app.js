@@ -69,7 +69,7 @@ function renderHero() {
     <section class="hero">
       <div class="container hero-grid hero-grid-clean">
         <div class="hero-copy deco-frame">
-          <div class="kicker">Electrical & electronic engineering</div>
+          <div class="kicker">${data.profile.heroEyebrow || 'Electrical & electronic engineering'}</div>
           <h1>${data.profile.tagline}</h1>
           <p class="lede">${data.profile.summary}</p>
           <p class="hero-subtext">${data.profile.statement}</p>
@@ -84,11 +84,9 @@ function renderHero() {
             ${data.profile.highlights.map(item => `<div class="hero-proof-item">${item}</div>`).join("")}
           </div>
         </div>
-        <a class="hero-feature" href="${hero.href || '#projects'}" aria-label="Open featured project">
-          <img src="${hero.src}" alt="${hero.alt}" loading="eager" />
-          <div class="hero-feature-caption">
-            <span>Featured evidence</span>
-            <strong>${hero.caption || 'Open case study'}</strong>
+        <a class="hero-feature pcbway-feature" href="${hero.href || '#projects'}" aria-label="Explore the PCBWay-sponsored board case study">
+          <div class="pcbway-collage">
+            ${data.profile.heroImages.map((photo, i) => `<figure class="pcbway-photo ${i === 0 ? 'pcbway-photo-main' : ''}"><img src="${photo.src}" alt="${photo.alt}" loading="eager" /><figcaption>${photo.caption}</figcaption></figure>`).join('')}
           </div>
         </a>
       </div>
