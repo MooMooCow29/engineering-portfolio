@@ -20,6 +20,7 @@ if (!data) throw new Error('PORTFOLIO_DATA was not found after loading the portf
 
 const siteUrl = data.profile.siteUrl.endsWith('/') ? data.profile.siteUrl : `${data.profile.siteUrl}/`;
 const social = `${siteUrl}assets/social-preview.jpg`;
+const assetVersion = '20261005-pcbway';
 const escapeHtml = (value = '') => String(value)
   .replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
   .replaceAll('"', '&quot;').replaceAll("'", '&#039;');
@@ -69,7 +70,7 @@ const indexHtml = `<!DOCTYPE html>
 <head>${headMeta({ title: homeTitle, description: homeDescription, canonical: siteUrl })}
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="stylesheet" href="assets/styles.css" />
+  <link rel="stylesheet" href="assets/styles.css?v=${assetVersion}" />
   <script type="application/ld+json">${JSON.stringify(personLd)}</script>
 </head>
 <body>
@@ -79,11 +80,11 @@ const indexHtml = `<!DOCTYPE html>
     <main id="app" tabindex="-1"></main>
     <footer class="site-footer" id="footer"></footer>
   </div>
-  <script src="data/content.js"></script>
-  <script src="data/updates.js"></script>
-  <script src="data/recent-projects.js"></script>
-  <script src="data/cv-link.js"></script>
-  <script src="assets/app.js"></script>
+  <script src="data/content.js?v=${assetVersion}"></script>
+  <script src="data/updates.js?v=${assetVersion}"></script>
+  <script src="data/recent-projects.js?v=${assetVersion}"></script>
+  <script src="data/cv-link.js?v=${assetVersion}"></script>
+  <script src="assets/app.js?v=${assetVersion}"></script>
 </body>
 </html>\n`;
 fs.writeFileSync(path.join(root, 'index.html'), indexHtml);
@@ -114,7 +115,7 @@ for (const project of data.projects) {
 <head>${headMeta({ title, description, canonical, image, type: 'article' })}
   <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml" />
   <link rel="manifest" href="../../manifest.webmanifest" />
-  <link rel="stylesheet" href="../../assets/styles.css" />
+  <link rel="stylesheet" href="../../assets/styles.css?v=${assetVersion}" />
   <script type="application/ld+json">${JSON.stringify(projectLd)}</script>
 </head>
 <body>
@@ -125,11 +126,11 @@ for (const project of data.projects) {
     <footer class="site-footer" id="footer"></footer>
   </div>
   <script>window.PROJECT_ID=${JSON.stringify(project.id)};window.SITE_BASE="../../";</script>
-  <script src="../../data/content.js"></script>
-  <script src="../../data/updates.js"></script>
-  <script src="../../data/recent-projects.js"></script>
-  <script src="../../data/cv-link.js"></script>
-  <script src="../../assets/project.js"></script>
+  <script src="../../data/content.js?v=${assetVersion}"></script>
+  <script src="../../data/updates.js?v=${assetVersion}"></script>
+  <script src="../../data/recent-projects.js?v=${assetVersion}"></script>
+  <script src="../../data/cv-link.js?v=${assetVersion}"></script>
+  <script src="../../assets/project.js?v=${assetVersion}"></script>
 </body>
 </html>\n`;
   fs.writeFileSync(path.join(dir, 'index.html'), html);
