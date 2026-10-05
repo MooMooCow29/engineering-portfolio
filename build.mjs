@@ -20,7 +20,7 @@ if (!data) throw new Error('PORTFOLIO_DATA was not found after loading the portf
 
 const siteUrl = data.profile.siteUrl.endsWith('/') ? data.profile.siteUrl : `${data.profile.siteUrl}/`;
 const social = `${siteUrl}assets/social-preview.jpg`;
-const assetVersion = '20261005-pcbway';
+const assetVersion = '20261005-pcbway2';
 const escapeHtml = (value = '') => String(value)
   .replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
   .replaceAll('"', '&quot;').replaceAll("'", '&#039;');

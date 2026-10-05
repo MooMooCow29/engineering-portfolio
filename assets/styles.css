@@ -1039,5 +1039,8 @@ main > section { padding: 3.3rem 0; }
 .pcbway-photo figcaption { padding: 7px 9px; background: #0c2942; color: white; font-size: .73rem; font-weight: 600; line-height: 1.35; }
 .pcbway-feature:hover { outline: 2px solid var(--teal); outline-offset: 3px; }
 .pcbway-feature:focus-visible { outline: 3px solid var(--orange); outline-offset: 4px; }
+.hero-grid-clean .hero-copy h1 { font-size: clamp(2.3rem, 4vw, 4rem); max-width: none; overflow-wrap: anywhere; }
+.pcbway-feature { align-self: start; }
 @media (max-width: 1050px) { .pcbway-collage { height: 640px; } }
 @media (max-width: 600px) { .pcbway-collage { height: 540px; gap: 6px; padding: 6px; } .pcbway-photo figcaption { padding: 6px; font-size: .69rem; } .hero-grid-clean .hero-copy { min-height: 0; } }
+@media (max-width: 600px) { .hero-grid-clean .hero-copy h1 { font-size: clamp(2rem, 9vw, 3.1rem); } }
