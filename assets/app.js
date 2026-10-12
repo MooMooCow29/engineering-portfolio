@@ -1,11 +1,10 @@
 const data = window.PORTFOLIO_DATA;
 
 const $ = (selector, root = document) => root.querySelector(selector);
-const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
 function cvLink(label = "CV", className = "") {
   if (!data.profile.cv) return "";
-  return '<a class="' + className + '" href="' + data.profile.cv + '" target="_blank" rel="noreferrer">' + label + '</a>';
+  return '<a class="' + className + '" href="' + data.profile.cv + '" target="_blank" rel="noreferrer" data-cursor="OPEN">' + label + '</a>';
 }
 
 function projectUrl(project) {
@@ -13,140 +12,132 @@ function projectUrl(project) {
 }
 
 function renderHeader() {
-  const header = $('#top');
-  header.innerHTML = [
-    '<div class="nav-wrap">',
-      '<a class="brand-v2" href="#top" aria-label="Karanveer Singh portfolio home">',
-        '<span class="brand-v2-name">' + data.profile.name + '</span>',
-        '<span class="brand-v2-role">Electrical &amp; Electronic Engineering</span>',
+  $('#top').innerHTML = [
+    '<div class="ak-nav shell">',
+      '<a class="ak-logo" href="#hero" aria-label="Karanveer Singh portfolio home">',
+        '<span class="ak-logo-mark">KS</span>',
+        '<span class="ak-logo-copy"><strong>Karanveer Singh</strong><small>Electrical &amp; Electronic Engineering</small></span>',
       '</a>',
-      '<nav class="nav-v2" aria-label="Primary navigation">',
-        '<a href="#work">Work</a>',
-        '<a href="#experience">Experience</a>',
-        '<a href="#writing">Writing</a>',
+      '<nav class="ak-nav-links" aria-label="Primary navigation">',
         '<a href="#about">About</a>',
+        '<a href="#skills">Capabilities</a>',
+        '<a href="#work">Work</a>',
+        '<a href="#writing">Writing</a>',
+        '<a href="#contact">Contact</a>',
         cvLink('CV'),
       '</nav>',
+      '<button class="ak-theme" type="button" aria-label="Toggle colour theme" data-theme-toggle>',
+        '<span aria-hidden="true">◐</span>',
+      '</button>',
+    '</div>'
+  ].join('');
+}
+
+function renderSystemMap() {
+  const nodes = [
+    { id: 'sense', label: 'SENSE', x: 18, y: 32, detail: 'Sensors, signal acquisition, estimation and measurement evidence.' },
+    { id: 'control', label: 'CONTROL', x: 50, y: 16, detail: 'Feedback, state logic, embedded control and autonomous behaviour.' },
+    { id: 'power', label: 'POWER', x: 82, y: 34, detail: 'Power architecture, energy harvesting and hardware boundaries.' },
+    { id: 'verify', label: 'VERIFY', x: 50, y: 74, detail: 'Requirements, test, fault injection, measurement and traceability.' }
+  ];
+  return [
+    '<div class="system-map" data-system-map>',
+      '<svg class="system-map-lines" viewBox="0 0 100 90" role="img" aria-label="Interactive engineering system map">',
+        '<path d="M18 32 L50 16 L82 34 L50 74 Z" />',
+        '<path d="M18 32 L82 34" />',
+        '<path d="M50 16 L50 74" />',
+      '</svg>',
+      nodes.map(node => '<button type="button" class="system-node" style="--x:' + node.x + '%;--y:' + node.y + '%" data-node="' + node.id + '" data-detail="' + node.detail + '"><span></span><strong>' + node.label + '</strong></button>').join(''),
+      '<div class="system-map-core"><span>ENGINEERING</span><strong>PHYSICAL → DIGITAL → VERIFIED</strong></div>',
+      '<p class="system-map-detail" aria-live="polite">Move through the system: sensing, control, power and verification.</p>',
     '</div>'
   ].join('');
 }
 
 function renderHero() {
-  const image = data.profile.heroImages && data.profile.heroImages[0];
   return [
-    '<section class="hero-v2">',
-      '<div class="container hero-v2-grid">',
-        '<div class="hero-v2-copy">',
-          '<p class="eyebrow-v2">Electrical · Embedded · Control · Research</p>',
-          '<h1>' + data.profile.name + '</h1>',
-          '<h2>' + data.profile.tagline + '</h2>',
-          '<p class="hero-v2-lede">' + data.profile.summary + '</p>',
-          '<div class="hero-v2-actions">',
-            '<a class="text-link-v2 text-link-strong" href="#work">Selected work <span aria-hidden="true">↘</span></a>',
-            '<a class="text-link-v2" href="#about">About</a>',
-            cvLink('CV', 'text-link-v2'),
+    '<section id="hero" class="ak-hero">',
+      '<div class="hero-atmos" aria-hidden="true"><span></span><span></span><span></span></div>',
+      '<div class="shell">',
+        '<div class="hero-topline reveal">',
+          '<div><span class="availability-dot"></span><span class="mono">Open to engineering roles · research · collaboration</span></div>',
+          '<span class="mono">©2026 / Engineering portfolio</span>',
+        '</div>',
+        '<div class="hero-name-wrap">',
+          '<h1 class="hero-name" aria-label="' + data.profile.name + '" data-split>',
+            '<span>KARANVEER</span><span>SINGH</span>',
+          '</h1>',
+        '</div>',
+        '<div class="hero-bottom">',
+          '<div class="hero-copy reveal">',
+            '<p class="hero-role">' + data.profile.tagline + '</p>',
+            '<p class="hero-summary">' + data.profile.summary + '</p>',
+            '<div class="hero-actions">',
+              '<a class="ak-btn ak-btn-solid magnetic" href="#work" data-cursor="VIEW"><span>Selected work ↘</span></a>',
+              '<a class="ak-btn ak-btn-ghost magnetic" href="#about"><span>About me</span></a>',
+            '</div>',
           '</div>',
-          '<div class="social-row-v2">',
-            data.profile.links.map(link => '<a href="' + link.href + '" target="_blank" rel="noreferrer">' + link.label + '</a>').join(''),
-          '</div>',
-        '</div>',
-        image ? [
-          '<a class="hero-v2-media" href="' + (image.href || '#work') + '">',
-            '<img src="' + image.src + '" alt="' + image.alt + '" loading="eager">',
-            '<div class="media-caption-v2"><span>Current focus</span><strong>' + image.caption + '</strong></div>',
-          '</a>'
-        ].join('') : '',
-      '</div>',
-      '<div class="container hero-v2-proof">',
-        data.profile.highlights.map((item, i) => '<div><span>0' + (i + 1) + '</span><p>' + item + '</p></div>').join(''),
-      '</div>',
-    '</section>'
-  ].join('');
-}
-
-function renderFeatureProject(project, index) {
-  const image = project.coverImage
-    ? '<a class="feature-media-v2" href="' + projectUrl(project) + '"><img src="' + project.coverImage + '" alt="' + project.title + '" loading="lazy" style="object-position:' + (project.coverPosition || '50% 50%') + ';object-fit:' + (project.coverFit || 'cover') + '"></a>'
-    : '';
-
-  return [
-    '<article class="feature-project-v2 ' + (index % 2 ? 'feature-project-reverse' : '') + '">',
-      image,
-      '<div class="feature-copy-v2">',
-        '<div class="project-meta-v2">',
-          '<span>' + String(index + 1).padStart(2, '0') + '</span>',
-          '<span>' + project.category + '</span>',
-          '<span>' + project.year + '</span>',
-        '</div>',
-        '<h3><a href="' + projectUrl(project) + '">' + project.title + '</a></h3>',
-        '<p class="feature-subtitle-v2">' + project.subtitle + '</p>',
-        '<p>' + project.summary + '</p>',
-        '<div class="feature-tags-v2">' + project.skills.slice(0, 5).map(skill => '<span>' + skill + '</span>').join('') + '</div>',
-        '<a class="text-link-v2 text-link-strong" href="' + projectUrl(project) + '">View case study <span aria-hidden="true">↗</span></a>',
-      '</div>',
-    '</article>'
-  ].join('');
-}
-
-function renderWork() {
-  const featured = data.projects.filter(project => project.featured && project.coverImage).slice(0, 6);
-  const all = data.projects;
-  const categories = ['All', ...new Set(all.map(project => project.category))];
-
-  return [
-    '<section id="work" class="section-v2 section-work-v2">',
-      '<div class="container">',
-        '<div class="section-heading-v2">',
-          '<div><p class="eyebrow-v2">Selected engineering work</p><h2>Built, tested, revised.</h2></div>',
-          '<p>Flagship projects are shown as engineering stories rather than identical cards. Open a case study for architecture, decisions, validation evidence, limitations and relevant links.</p>',
-        '</div>',
-        '<div class="feature-list-v2">',
-          featured.map(renderFeatureProject).join(''),
+          renderSystemMap(),
         '</div>',
       '</div>',
     '</section>',
-    '<section id="projects" class="section-v2 project-index-v2">',
-      '<div class="container">',
-        '<div class="section-heading-v2 compact-heading-v2">',
-          '<div><p class="eyebrow-v2">Project index</p><h2>More than fits on a CV.</h2></div>',
-          '<p>Smaller prototypes, research directions and software work live here without competing visually with the flagship case studies.</p>',
-        '</div>',
-        '<div class="filter-row-v2" role="group" aria-label="Filter project index">',
-          categories.map((category, index) => '<button type="button" class="filter-v2 ' + (index === 0 ? 'is-active' : '') + '" data-filter="' + category.toLowerCase() + '">' + category + '</button>').join(''),
-        '</div>',
-        '<div class="project-table-v2">',
-          all.map((project, index) => [
-            '<a class="project-row-v2" href="' + projectUrl(project) + '" data-category="' + project.category.toLowerCase() + '">',
-              '<span class="project-row-number">' + String(index + 1).padStart(2, '0') + '</span>',
-              '<span class="project-row-title">' + project.title + '</span>',
-              '<span class="project-row-category">' + project.category + '</span>',
-              '<span class="project-row-year">' + project.year + '</span>',
-              '<span class="project-row-arrow" aria-hidden="true">↗</span>',
-            '</a>'
-          ].join('')).join(''),
+    '<div class="ak-marquee" aria-hidden="true"><div class="ak-marquee-track">',
+      ['EMBEDDED SYSTEMS','CONTROL','PCB DESIGN','VERIFICATION','ROBOTICS','POWER ELECTRONICS','SENSING','RESEARCH','EMBEDDED SYSTEMS','CONTROL','PCB DESIGN','VERIFICATION','ROBOTICS','POWER ELECTRONICS','SENSING','RESEARCH'].map(item => '<span>' + item + '</span>').join(''),
+    '</div></div>'
+  ].join('');
+}
+
+function renderAbout() {
+  const timeline = data.experience.slice(0, 4);
+  return [
+    '<section id="about" class="ak-section ak-about">',
+      '<div class="shell">',
+        '<div class="ak-sec-head reveal"><span class="ak-tag">About</span><span class="ak-line"></span><span class="ak-sec-title">Engineer first. Curious about the whole system.</span></div>',
+        '<div class="about-grid">',
+          '<div class="about-copy">',
+            '<h2 class="about-heading reveal">I like work where <em>hardware, software and physical systems</em> have to agree.</h2>',
+            '<p class="reveal">' + data.profile.summary + '</p>',
+            '<p class="reveal">This site is deliberately broader than a CV: it shows requirements, architecture, experiments, failures, measurements and what changed after testing.</p>',
+            '<div class="about-tags reveal">',
+              ['Embedded systems','PCB design','Control','Power electronics','Verification','Research'].map(item => '<span>' + item + '</span>').join(''),
+            '</div>',
+          '</div>',
+          '<div class="about-side">',
+            '<figure class="portrait-card reveal" data-tilt>',
+              '<img src="' + data.profile.portrait.src + '" alt="' + data.profile.portrait.alt + '">',
+              '<figcaption><strong>' + data.profile.name + '</strong><span>' + data.profile.role + '</span></figcaption>',
+            '</figure>',
+            '<div class="timeline">',
+              timeline.map((item, index) => [
+                '<div class="timeline-row reveal">',
+                  '<span>' + item.period + '</span>',
+                  '<div><strong>' + item.title + '</strong><small>' + item.organisation + '</small></div>',
+                '</div>'
+              ].join('')).join(''),
+            '</div>',
+          '</div>',
         '</div>',
       '</div>',
     '</section>'
   ].join('');
 }
 
-function renderCapabilities() {
-  const projectMap = new Map(data.projects.map(project => [project.id, project]));
+function renderSkills() {
   return [
-    '<section id="skills" class="section-v2 capability-v2">',
-      '<div class="container">',
-        '<div class="section-heading-v2 compact-heading-v2">',
-          '<div><p class="eyebrow-v2">What I work with</p><h2>Capability backed by evidence.</h2></div>',
-          '<p>No percentages or decorative skill meters. Each area links directly to project work that demonstrates it.</p>',
-        '</div>',
-        '<div class="capability-list-v2">',
+    '<section id="skills" class="ak-section ak-skills">',
+      '<div class="shell">',
+        '<div class="ak-sec-head reveal"><span class="ak-tag">Capabilities</span><span class="ak-line"></span><span class="ak-sec-title">What I work with</span></div>',
+        '<div class="service-list">',
           data.skills.map((group, index) => [
-            '<article class="capability-row-v2">',
-              '<span class="capability-number-v2">0' + (index + 1) + '</span>',
+            '<article class="service-row reveal">',
+              '<span class="service-num">' + String(index + 1).padStart(2, '0') + '</span>',
               '<h3>' + group.title + '</h3>',
               '<p>' + group.description + '</p>',
-              '<div class="capability-projects-v2">',
-                group.projectIds.map(id => projectMap.get(id)).filter(Boolean).slice(0, 4).map(project => '<a href="' + projectUrl(project) + '">' + project.title + '</a>').join(''),
+              '<div class="service-links">',
+                group.projectIds.slice(0, 3).map(id => {
+                  const project = data.projects.find(p => p.id === id);
+                  return project ? '<a href="' + projectUrl(project) + '">' + project.title + ' ↗</a>' : '';
+                }).join(''),
               '</div>',
             '</article>'
           ].join('')).join(''),
@@ -156,21 +147,69 @@ function renderCapabilities() {
   ].join('');
 }
 
-function renderExperience() {
+function projectEvidence(project) {
+  const seen = new Set();
+  const images = [];
+  const candidates = [
+    project.coverImage ? { src: project.coverImage, caption: project.title } : null,
+    ...(project.gallery || [])
+  ].filter(Boolean);
+  candidates.forEach(item => {
+    if (!seen.has(item.src)) {
+      seen.add(item.src);
+      images.push(item);
+    }
+  });
+  return images.slice(0, 4);
+}
+
+function renderProjectPanel(project, index) {
+  const evidence = projectEvidence(project);
+  const cover = evidence[0];
   return [
-    '<section id="experience" class="section-v2">',
-      '<div class="container">',
-        '<div class="section-heading-v2 compact-heading-v2">',
-          '<div><p class="eyebrow-v2">Experience</p><h2>Industry, leadership, technical context.</h2></div>',
-          '<p>The projects do the technical proving; these roles explain where the engineering judgement, collaboration and delivery context came from.</p>',
+    '<article class="project-panel" style="--panel-index:' + index + '">',
+      '<div class="shell panel-grid">',
+        '<div class="panel-visual reveal" data-tilt data-cursor="VIEW">',
+          '<span class="panel-bgmark">' + (project.title.split(/\s+/).map(x=>x[0]).join('').slice(0,3).toUpperCase()) + '</span>',
+          cover ? '<div class="evidence-main"><img src="' + cover.src + '" alt="' + (cover.caption || project.title) + '" data-evidence-main></div>' : '<div class="evidence-placeholder"><span>' + project.category + '</span><strong>' + project.title + '</strong></div>',
+          evidence.length > 1 ? '<div class="evidence-thumbs" aria-label="Project evidence images">' + evidence.map((img, i) => '<button type="button" class="evidence-thumb ' + (i===0?'is-active':'') + '" data-src="' + img.src + '" data-alt="' + (img.caption || project.title).replace(/"/g,'&quot;') + '" aria-label="Show evidence image ' + (i+1) + '"><img src="' + img.src + '" alt=""></button>').join('') + '</div>' : '',
         '</div>',
-        '<div class="timeline-v2">',
-          data.experience.map((item, index) => [
-            '<article class="timeline-row-v2">',
-              '<div class="timeline-period-v2">' + item.period + '</div>',
-              '<div class="timeline-title-v2"><span>0' + (index + 1) + '</span><h3>' + item.title + '</h3><strong>' + item.organisation + '</strong></div>',
-              '<p>' + item.summary + '</p>',
-            '</article>'
+        '<div class="panel-info">',
+          '<div class="panel-num">' + String(index + 1).padStart(2, '0') + ' — ' + project.category + '</div>',
+          '<h3>' + project.title + '</h3>',
+          '<p class="panel-subtitle">' + project.subtitle + '</p>',
+          '<p>' + project.summary + '</p>',
+          '<div class="panel-tags">' + project.skills.slice(0, 6).map(skill => '<span>' + skill + '</span>').join('') + '</div>',
+          '<div class="panel-actions">',
+            '<a class="ak-btn ak-btn-solid magnetic" href="' + projectUrl(project) + '" data-cursor="OPEN"><span>Read case study ↗</span></a>',
+            project.links && project.links[0] ? '<a class="ak-btn ak-btn-ghost magnetic" href="' + project.links[0].href + '" target="_blank" rel="noreferrer" data-cursor="VISIT"><span>' + project.links[0].label + '</span></a>' : '',
+          '</div>',
+        '</div>',
+      '</div>',
+    '</article>'
+  ].join('');
+}
+
+function renderWork() {
+  const featureIds = ['aurora-vx','advanced-2wd-robot-controller','formula-student-electrical','pysignalscope'];
+  const selected = featureIds.map(id => data.projects.find(p => p.id === id)).filter(Boolean);
+  const selectedSet = new Set(featureIds);
+  const more = data.projects.filter(p => !selectedSet.has(p.id));
+
+  return [
+    '<section id="work" class="ak-section ak-work">',
+      '<div class="shell"><div class="ak-sec-head reveal"><span class="ak-tag">Selected work</span><span class="ak-line"></span><span class="ak-sec-title">Things I have built, tested and defended.</span></div></div>',
+      '<div class="project-stack">' + selected.map(renderProjectPanel).join('') + '</div>',
+      '<div class="shell more-projects">',
+        '<div class="more-head reveal"><span class="mono">More projects</span><span>' + more.length + ' additional engineering records</span></div>',
+        '<div class="more-grid">',
+          more.map((project, index) => [
+            '<a class="mini-project reveal" href="' + projectUrl(project) + '">',
+              '<span class="mini-num">' + String(index + selected.length + 1).padStart(2,'0') + '</span>',
+              '<strong>' + project.title + '</strong>',
+              '<p>' + project.summary + '</p>',
+              '<div><span>' + project.category + '</span><b>↗</b></div>',
+            '</a>'
           ].join('')).join(''),
         '</div>',
       '</div>',
@@ -180,46 +219,19 @@ function renderExperience() {
 
 function renderWriting() {
   return [
-    '<section id="writing" class="section-v2 writing-v2">',
-      '<div class="container">',
-        '<div class="section-heading-v2 compact-heading-v2">',
-          '<div><p class="eyebrow-v2">Writing about the process</p><h2>Engineering, explained in public.</h2></div>',
-          '<p>Technical articles, engineering documentation and open-source contributions sit alongside the project evidence.</p>',
-        '</div>',
-        '<div class="writing-list-v2">',
+    '<section id="writing" class="ak-section ak-writing">',
+      '<div class="shell">',
+        '<div class="ak-sec-head reveal"><span class="ak-tag">Writing</span><span class="ak-line"></span><span class="ak-sec-title">Engineering, explained in public.</span></div>',
+        '<div class="writing-list">',
           data.writing.map((item, index) => [
-            '<a class="writing-row-v2" href="' + item.href + '" target="_blank" rel="noreferrer">',
-              '<span class="writing-number-v2">' + String(index + 1).padStart(2, '0') + '</span>',
-              '<span class="writing-category-v2">' + item.category + '</span>',
-              '<span class="writing-title-v2">' + item.title + '</span>',
-              '<span class="writing-arrow-v2" aria-hidden="true">↗</span>',
+            '<a class="writing-row reveal" href="' + item.href + '" target="_blank" rel="noreferrer" data-cursor="OPEN">',
+              '<span>' + String(index+1).padStart(2,'0') + '</span>',
+              '<small>' + item.category + '</small>',
+              '<strong>' + item.title + '</strong>',
+              '<b>↗</b>',
             '</a>'
           ].join('')).join(''),
         '</div>',
-        '<div class="writing-more-v2"><a class="text-link-v2 text-link-strong" href="https://medium.com/@ks683557" target="_blank" rel="noreferrer">View Medium profile <span aria-hidden="true">↗</span></a></div>',
-      '</div>',
-    '</section>'
-  ].join('');
-}
-
-function renderAbout() {
-  return [
-    '<section id="about" class="section-v2 about-v2">',
-      '<div class="container about-v2-grid">',
-        '<div class="about-v2-copy">',
-          '<p class="eyebrow-v2">Outside the schematic</p>',
-          '<h2>Engineer first. Curious about the whole system.</h2>',
-          '<p>' + data.profile.summary + '</p>',
-          '<p>I am most interested in problems where physical systems, electronics and software interact: embedded systems, robotics, control, power electronics, sensing, verification and research-led engineering.</p>',
-          '<p>The portfolio is intentionally broader than a CV. I use it to show the decisions, measurements, failed routes and evidence behind the finished line on a résumé.</p>',
-          '<div class="about-links-v2">',
-            data.profile.links.map(link => '<a class="text-link-v2" href="' + link.href + '" target="_blank" rel="noreferrer">' + link.label + ' ↗</a>').join(''),
-            cvLink('CV ↗', 'text-link-v2'),
-          '</div>',
-        '</div>',
-        '<figure class="portrait-v2">',
-          '<img src="' + data.profile.portrait.src + '" alt="' + data.profile.portrait.alt + '" loading="lazy">',
-        '</figure>',
       '</div>',
     '</section>'
   ].join('');
@@ -227,15 +239,15 @@ function renderAbout() {
 
 function renderContact() {
   return [
-    '<section id="contact" class="contact-v2">',
-      '<div class="container contact-v2-inner">',
-        '<p class="eyebrow-v2">Research · placements · jobs · collaboration</p>',
-        '<h2>Have an engineering problem worth discussing?</h2>',
-        '<div class="contact-links-v2">',
-          '<a href="https://www.linkedin.com/in/karan-singh-6901a7246/" target="_blank" rel="noreferrer">LinkedIn ↗</a>',
-          '<a href="https://github.com/MooMooCow29" target="_blank" rel="noreferrer">GitHub ↗</a>',
-          '<a href="https://medium.com/@ks683557" target="_blank" rel="noreferrer">Medium ↗</a>',
-          cvLink('CV ↗'),
+    '<section id="contact" class="ak-contact">',
+      '<div class="contact-glow" aria-hidden="true"></div>',
+      '<div class="shell">',
+        '<div class="ak-sec-head reveal"><span class="ak-tag">Get in touch</span><span class="ak-line"></span></div>',
+        '<h2 class="contact-head reveal">Let’s build something <em>worth testing.</em></h2>',
+        '<p class="contact-copy reveal">I am interested in engineering roles, placements, research opportunities and collaborations across embedded systems, electronics, control, robotics, power and verification.</p>',
+        '<div class="contact-links reveal">',
+          data.profile.links.map(link => '<a href="' + link.href + '" target="_blank" rel="noreferrer" data-cursor="VISIT">' + link.label + ' <span>↗</span></a>').join(''),
+          cvLink('CV ↓'),
         '</div>',
       '</div>',
     '</section>'
@@ -243,50 +255,25 @@ function renderContact() {
 }
 
 function renderFooter() {
-  const footer = $('#footer');
-  footer.innerHTML = [
-    '<div class="container footer-v2">',
-      '<span>© ' + new Date().getFullYear() + ' ' + data.profile.name + '</span>',
-      '<span>Electrical &amp; Electronic Engineering · ' + data.profile.organisation + '</span>',
-      '<a href="#top">Back to top ↑</a>',
-    '</div>'
+  $('#footer').innerHTML = [
+    '<div class="shell footer-grid">',
+      '<div><strong>Engineering evidence, deliberately.</strong><span>© ' + new Date().getFullYear() + ' ' + data.profile.name + '</span></div>',
+      '<div><a href="#hero">Home</a><a href="#work">Work</a><a href="#writing">Writing</a><a href="#contact">Contact</a></div>',
+      '<div><a href="https://github.com/MooMooCow29" target="_blank" rel="noreferrer">GitHub ↗</a><a href="https://www.linkedin.com/in/karan-singh-6901a7246/" target="_blank" rel="noreferrer">LinkedIn ↗</a><a href="https://medium.com/@ks683557" target="_blank" rel="noreferrer">Medium ↗</a></div>',
+    '</div>',
+    '<div class="footer-word" aria-hidden="true">KARANVEER</div>'
   ].join('');
 }
 
-function setupFilters() {
-  $$('.filter-v2').forEach(button => {
-    button.addEventListener('click', () => {
-      $$('.filter-v2').forEach(item => item.classList.remove('is-active'));
-      button.classList.add('is-active');
-      const filter = button.dataset.filter;
-      $$('.project-row-v2').forEach(row => {
-        row.hidden = filter !== 'all' && row.dataset.category !== filter;
-      });
-    });
-  });
-}
-
-function setupHeaderState() {
-  const header = $('#top');
-  const update = () => header.classList.toggle('is-scrolled', window.scrollY > 12);
-  update();
-  window.addEventListener('scroll', update, { passive: true });
+function renderCursor() {
+  document.body.insertAdjacentHTML('beforeend','<div class="cursor-dot" aria-hidden="true"></div><div class="cursor-ring" aria-hidden="true"><span></span></div>');
 }
 
 function render() {
   renderHeader();
-  $('#app').innerHTML = [
-    renderHero(),
-    renderWork(),
-    renderCapabilities(),
-    renderExperience(),
-    renderWriting(),
-    renderAbout(),
-    renderContact()
-  ].join('');
+  $('#app').innerHTML = [renderHero(), renderAbout(), renderSkills(), renderWork(), renderWriting(), renderContact()].join('');
   renderFooter();
-  setupFilters();
-  setupHeaderState();
+  renderCursor();
 }
 
 render();
