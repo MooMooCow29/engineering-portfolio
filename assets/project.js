@@ -1,219 +1,249 @@
 const data = window.PORTFOLIO_DATA;
 const siteBase = window.SITE_BASE || "../../";
 
-function el(tag, className, html) {
-  const node = document.createElement(tag);
-  if (className) node.className = className;
-  if (html !== undefined) node.innerHTML = html;
-  return node;
-}
-
-function projectAccentClass(project) {
-  if (project.accent === "orange") return "accent-orange";
-  if (project.accent === "navy") return "accent-navy";
-  return "accent-teal";
-}
+const $ = (selector, root = document) => root.querySelector(selector);
 
 function assetPath(path) {
-  return path ? `${siteBase}${path}` : "";
+  return path ? siteBase + path : "";
 }
 
 function cvLink(label = "CV", className = "") {
   if (!data.profile.cv) return "";
-  return `<a class="${className}" href="${assetPath(data.profile.cv)}" target="_blank" rel="noreferrer">${label}</a>`;
-}
-
-function renderHeader() {
-  const header = document.getElementById("top");
-  const wrap = el("div", "nav-wrap");
-  wrap.innerHTML = `
-    <a class="brand" href="${siteBase}index.html" aria-label="Return to portfolio home">
-      <div class="brand-mark">${data.profile.initials}</div>
-      <div class="brand-text"><strong>${data.profile.name}</strong><span>Engineering portfolio</span></div>
-    </a>
-    <nav class="nav-links" aria-label="Project navigation">
-      <a href="${siteBase}index.html#projects">Featured</a>
-      <a href="${siteBase}index.html#project-directory">All projects</a>
-      <a href="${siteBase}index.html#writing">Writing</a>
-      <a href="${siteBase}index.html#contact">Contact</a>
-      ${cvLink("CV")}
-    </nav>`;
-  header.appendChild(wrap);
-}
-
-function renderFooter() {
-  const footer = document.getElementById("footer");
-  const wrap = el("div", "footer-wrap");
-  wrap.innerHTML = `
-    <div class="footer-brand"><strong>${data.profile.name}</strong><span>${data.profile.role} · ${data.profile.organisation}</span></div>
-    <div class="footer-meta">Project case study · evidence-led engineering portfolio</div>`;
-  footer.appendChild(wrap);
+  return '<a class="' + className + '" href="' + assetPath(data.profile.cv) + '" target="_blank" rel="noreferrer">' + label + '</a>';
 }
 
 function getProject() {
-  if (window.PROJECT_ID) return data.projects.find(project => project.id === window.PROJECT_ID);
-  const id = new URLSearchParams(window.location.search).get("id");
+  const id = window.PROJECT_ID || new URLSearchParams(window.location.search).get("id");
   return data.projects.find(project => project.id === id);
 }
 
-function renderCover(project) {
-  if (project.coverImage) {
-    const pos = project.coverPosition || "50% 50%";
-    return `<img src="${assetPath(project.coverImage)}" alt="${project.title}" style="object-position:${pos};object-fit:${project.coverFit || "cover"}" />`;
-  }
-  return `<div class="technical-cover technical-cover-large"><span class="technical-cover-kicker">${project.category}</span><strong>${project.coverLabel || project.title}</strong><small>${project.coverDetail || project.subtitle}</small></div>`;
+function renderHeader() {
+  const header = $("#top");
+  header.innerHTML = [
+    '<div class="nav-wrap">',
+      '<a class="brand-v2" href="' + siteBase + 'index.html" aria-label="Karanveer Singh portfolio home">',
+        '<span class="brand-v2-name">' + data.profile.name + '</span>',
+        '<span class="brand-v2-role">Electrical &amp; Electronic Engineering</span>',
+      '</a>',
+      '<nav class="nav-v2" aria-label="Project navigation">',
+        '<a href="' + siteBase + 'index.html#work">Work</a>',
+        '<a href="' + siteBase + 'index.html#experience">Experience</a>',
+        '<a href="' + siteBase + 'index.html#writing">Writing</a>',
+        '<a href="' + siteBase + 'index.html#about">About</a>',
+        cvLink("CV"),
+      '</nav>',
+    '</div>'
+  ].join('');
 }
 
-function renderProjectCard(project) {
-  return `
-    <article class="project-card ${projectAccentClass(project)}">
-      <a href="../${project.id}/" aria-label="Open ${project.title}">
-        <div class="project-cover">${project.coverImage ? `<img src="${assetPath(project.coverImage)}" alt="${project.title}" loading="lazy" style="object-position:${project.coverPosition || "50% 50%"};object-fit:${project.coverFit || "cover"}" />` : `<div class="technical-cover"><span class="technical-cover-kicker">${project.category}</span><strong>${project.coverLabel || project.title}</strong><small>${project.coverDetail || project.subtitle}</small></div>`}</div>
-      </a>
-      <div class="project-body">
-        <div class="meta-row"><span class="meta-pill">${project.year}</span><span class="status-pill">${project.status}</span></div>
-        <h3><a href="../${project.id}/">${project.title}</a></h3>
-        <p class="project-subtitle">${project.subtitle}</p>
-        <p>${project.summary}</p>
-      </div>
-    </article>`;
-}
-
-function renderVerification(project) {
-  if (!project.verification || !project.verification.length) return "";
-  return `
-    <section class="project-section">
-      <h2>Verification snapshot</h2>
-      <div class="verification-table-wrap">
-        <table class="verification-table">
-          <thead><tr><th>Evidence</th><th>Result</th><th>Boundary / note</th></tr></thead>
-          <tbody>
-            ${project.verification.map(row => `<tr><td>${row.metric}</td><td><strong>${row.result}</strong></td><td>${row.note}</td></tr>`).join("")}
-          </tbody>
-        </table>
-      </div>
-    </section>`;
-}
-
-function renderFacts(project) {
-  if (!project.facts || !project.facts.length) return "";
-  return `
-    <section class="project-section project-facts-section">
-      <div class="project-section-heading"><span class="section-index">00</span><h2>At a glance</h2></div>
-      <dl class="project-facts-grid">
-        ${project.facts.map(item => `<div class="project-fact"><dt>${item.label}</dt><dd>${item.value}</dd></div>`).join("")}
-      </dl>
-    </section>`;
-}
-
-function renderCaseStudySections(project) {
-  if (!project.caseStudySections || !project.caseStudySections.length) return "";
-  return project.caseStudySections.map((section, index) => `
-    <section class="project-section deep-case-section">
-      <div class="project-section-heading"><span class="section-index">${String(index + 1).padStart(2, "0")}</span><h2>${section.title}</h2></div>
-      <p>${section.intro}</p>
-      ${section.bullets && section.bullets.length ? `<ul class="case-study-bullets">${section.bullets.map(item => `<li>${item}</li>`).join("")}</ul>` : ""}
-      ${section.note ? `<div class="engineering-note"><strong>Engineering boundary</strong><span>${section.note}</span></div>` : ""}
-    </section>`).join("");
-}
-
-function renderLegacyStudy(project) {
-  return `
-    <section class="project-section"><h2>Challenge</h2><p>${project.challenge}</p></section>
-    <section class="project-section"><h2>Approach</h2><p>${project.approach}</p></section>
-    <section class="project-section"><h2>Key decisions</h2><ul class="bullet-list">${project.decisions.map(item => `<li>${item}</li>`).join("")}</ul></section>
-    <section class="project-section"><h2>Testing & validation</h2><p>${project.testing}</p></section>
-    <section class="project-section"><h2>Outcome / why it matters</h2><p>${project.impact}</p></section>`;
-}
-
-function renderGallery(project) {
-  if (!project.gallery || !project.gallery.length) return "";
-  return `
-    <section class="project-section project-gallery-section">
-      <div class="project-section-heading"><span class="section-index">EV</span><h2>Evidence gallery</h2></div>
-      <p class="gallery-intro">Only images that directly support this project are included here. Where no project-specific image exists, the case study stays text-led rather than borrowing unrelated photography.</p>
-      <div class="gallery-grid">
-        ${project.gallery.map(image => `<figure class="image-card"><img src="${assetPath(image.src)}" alt="${image.caption}" loading="lazy" /><figcaption class="image-caption">${image.caption}</figcaption></figure>`).join("")}
-      </div>
-    </section>`;
+function renderFooter() {
+  $("#footer").innerHTML = [
+    '<div class="container footer-v2">',
+      '<span>© ' + new Date().getFullYear() + ' ' + data.profile.name + '</span>',
+      '<span>Project case study · evidence-led engineering portfolio</span>',
+      '<a href="' + siteBase + 'index.html#work">All work ↑</a>',
+    '</div>'
+  ].join('');
 }
 
 function renderExternalLinks(project) {
   if (!project.links || !project.links.length) return "";
-  return `<div class="project-external-links">${project.links.map(link => `<a class="btn btn-secondary" href="${link.href}" target="_blank" rel="noreferrer">${link.label}</a>`).join("")}</div>`;
+  return [
+    '<div class="project-links-v2">',
+      project.links.map(link => '<a href="' + link.href + '" target="_blank" rel="noreferrer">' + link.label + ' ↗</a>').join(''),
+    '</div>'
+  ].join('');
+}
+
+function renderFacts(project) {
+  if (!project.facts || !project.facts.length) return "";
+  return [
+    '<section class="case-block-v2 case-facts-v2">',
+      '<div class="case-heading-v2"><span>00</span><h2>At a glance</h2></div>',
+      '<dl class="facts-v2">',
+        project.facts.map(item => '<div><dt>' + item.label + '</dt><dd>' + item.value + '</dd></div>').join(''),
+      '</dl>',
+    '</section>'
+  ].join('');
+}
+
+function renderCaseSections(project) {
+  if (project.caseStudySections && project.caseStudySections.length) {
+    return project.caseStudySections.map((section, index) => [
+      '<section class="case-block-v2">',
+        '<div class="case-heading-v2"><span>' + String(index + 1).padStart(2, "0") + '</span><h2>' + section.title + '</h2></div>',
+        '<div class="case-copy-v2">',
+          '<p>' + section.intro + '</p>',
+          section.bullets && section.bullets.length
+            ? '<ul>' + section.bullets.map(item => '<li>' + item + '</li>').join('') + '</ul>'
+            : '',
+          section.note
+            ? '<aside class="boundary-v2"><strong>Engineering boundary</strong><p>' + section.note + '</p></aside>'
+            : '',
+        '</div>',
+      '</section>'
+    ].join('')).join('');
+  }
+
+  const sections = [
+    ["01", "Challenge", project.challenge],
+    ["02", "Approach", project.approach],
+    ["03", "Testing & validation", project.testing],
+    ["04", "Outcome", project.impact]
+  ];
+
+  return sections.filter(item => item[2]).map(item => [
+    '<section class="case-block-v2">',
+      '<div class="case-heading-v2"><span>' + item[0] + '</span><h2>' + item[1] + '</h2></div>',
+      '<div class="case-copy-v2"><p>' + item[2] + '</p></div>',
+    '</section>'
+  ].join('')).join('');
+}
+
+function renderVerification(project) {
+  if (!project.verification || !project.verification.length) return "";
+  return [
+    '<section class="case-block-v2">',
+      '<div class="case-heading-v2"><span>VR</span><h2>Verification snapshot</h2></div>',
+      '<div class="verification-v2">',
+        project.verification.map(row => [
+          '<div class="verification-row-v2">',
+            '<span>' + row.metric + '</span>',
+            '<strong>' + row.result + '</strong>',
+            '<p>' + row.note + '</p>',
+          '</div>'
+        ].join('')).join(''),
+      '</div>',
+    '</section>'
+  ].join('');
+}
+
+function renderNextSteps(project) {
+  if (!project.nextSteps || !project.nextSteps.length) return "";
+  return [
+    '<section class="case-block-v2">',
+      '<div class="case-heading-v2"><span>NX</span><h2>Next engineering gates</h2></div>',
+      '<div class="case-copy-v2"><ul>',
+        project.nextSteps.map(item => '<li>' + item + '</li>').join(''),
+      '</ul></div>',
+    '</section>'
+  ].join('');
+}
+
+function renderGallery(project) {
+  if (!project.gallery || !project.gallery.length) return "";
+  return [
+    '<section class="gallery-v2">',
+      '<div class="case-heading-v2 gallery-heading-v2"><span>EV</span><h2>Evidence gallery</h2></div>',
+      '<div class="gallery-grid-v2">',
+        project.gallery.map((image, index) => [
+          '<figure class="gallery-item-v2 ' + (index === 0 ? 'gallery-item-wide' : '') + '">',
+            '<img src="' + assetPath(image.src) + '" alt="' + image.caption + '" loading="lazy">',
+            '<figcaption><span>' + String(index + 1).padStart(2, "0") + '</span>' + image.caption + '</figcaption>',
+          '</figure>'
+        ].join('')).join(''),
+      '</div>',
+    '</section>'
+  ].join('');
+}
+
+function renderRelated(project) {
+  const related = data.projects
+    .filter(item => item.id !== project.id)
+    .sort((a, b) => Number(b.category === project.category) - Number(a.category === project.category))
+    .slice(0, 3);
+
+  return [
+    '<section class="related-v2">',
+      '<div class="section-heading-v2 compact-heading-v2">',
+        '<div><p class="eyebrow-v2">Keep exploring</p><h2>Related work.</h2></div>',
+      '</div>',
+      '<div class="related-list-v2">',
+        related.map((item, index) => [
+          '<a href="../' + item.id + '/">',
+            '<span>0' + (index + 1) + '</span>',
+            '<strong>' + item.title + '</strong>',
+            '<em>' + item.category + '</em>',
+            '<b aria-hidden="true">↗</b>',
+          '</a>'
+        ].join('')).join(''),
+      '</div>',
+    '</section>'
+  ].join('');
 }
 
 function renderNotFound() {
-  document.getElementById("project-app").innerHTML = `
-    <section class="project-page"><div class="container"><div class="empty-state deco-frame">
-      <div class="section-eyebrow">Project not found</div><h1 class="project-title">This case study is unavailable.</h1>
-      <p class="project-subcopy">The link may be outdated. Return to the project index to continue browsing.</p>
-      <a class="btn btn-primary" href="${siteBase}index.html#project-directory">View all projects</a>
-    </div></div></section>`;
+  $("#project-app").innerHTML = [
+    '<section class="project-v2"><div class="container">',
+      '<p class="eyebrow-v2">Project not found</p>',
+      '<h1 class="project-title-v2">This case study is unavailable.</h1>',
+      '<a class="text-link-v2 text-link-strong" href="' + siteBase + 'index.html#projects">Return to project index ↗</a>',
+    '</div></section>'
+  ].join('');
 }
 
 function renderPage() {
   renderHeader();
   renderFooter();
+
   const project = getProject();
   if (!project) return renderNotFound();
 
-  document.title = `${project.title} | ${data.profile.name}`;
-  const app = document.getElementById("project-app");
-  const related = data.projects
-    .filter(item => item.id !== project.id)
-    .sort((a,b) => Number(b.category === project.category) - Number(a.category === project.category))
-    .slice(0,3);
+  document.title = project.title + ' | ' + data.profile.name;
 
-  app.innerHTML = `
-    <section class="project-page">
-      <div class="container">
-        <a class="back-link" href="${siteBase}index.html#project-directory">← Back to project index</a>
-        <div class="project-banner deco-frame ${projectAccentClass(project)}">
-          <div class="project-hero">
-            <div>
-              <div class="meta-row"><span class="meta-pill">${project.year}</span><span class="status-pill">${project.status}</span><span class="meta-pill">${project.category}</span></div>
-              <h1 class="project-title">${project.title}</h1>
-              <p class="project-subtitle" style="font-size:1.05rem;margin-top:0.4rem;">${project.subtitle}</p>
-              <p class="project-subcopy">${project.summary}</p>
-              <div class="tag-row">${project.skills.map(skill => `<span class="tag">${skill}</span>`).join("")}</div>
-              ${renderExternalLinks(project)}
-            </div>
-            <div class="project-cover-large">${renderCover(project)}</div>
-          </div>
-        </div>
+  const cover = project.coverImage
+    ? [
+      '<figure class="project-hero-media-v2">',
+        '<img src="' + assetPath(project.coverImage) + '" alt="' + project.title + '" style="object-position:' + (project.coverPosition || '50% 50%') + ';object-fit:' + (project.coverFit || 'cover') + '">',
+      '</figure>'
+    ].join('')
+    : '';
 
-        <div class="project-detail-grid">
-          <div class="project-content">
-            ${renderFacts(project)}
-            ${project.contribution ? `<section class="project-section contribution-section"><div class="project-section-heading"><span class="section-index">ME</span><h2>My contribution</h2></div><p>${project.contribution}</p></section>` : ""}
-            ${project.caseStudySections && project.caseStudySections.length ? renderCaseStudySections(project) : renderLegacyStudy(project)}
-            ${renderVerification(project)}
-            <section class="project-section next-steps-section"><div class="project-section-heading"><span class="section-index">NX</span><h2>Next engineering gates</h2></div><ul class="case-study-bullets">${project.nextSteps.map(item => `<li>${item}</li>`).join("")}</ul></section>
-            ${renderGallery(project)}
-          </div>
+  $("#project-app").innerHTML = [
+    '<article class="project-v2">',
+      '<header class="project-intro-v2">',
+        '<div class="container">',
+          '<a class="back-v2" href="' + siteBase + 'index.html#projects">← All projects</a>',
+          '<div class="project-kicker-v2"><span>' + project.category + '</span><span>' + project.year + '</span><span>' + project.status + '</span></div>',
+          '<div class="project-intro-grid-v2">',
+            '<div>',
+              '<h1 class="project-title-v2">' + project.title + '</h1>',
+              '<p class="project-subtitle-v2">' + project.subtitle + '</p>',
+            '</div>',
+            '<div class="project-intro-copy-v2">',
+              '<p>' + project.summary + '</p>',
+              '<div class="project-skills-v2">' + project.skills.map(skill => '<span>' + skill + '</span>').join('') + '</div>',
+              renderExternalLinks(project),
+            '</div>',
+          '</div>',
+        '</div>',
+      '</header>',
+      cover,
+      '<div class="container case-layout-v2">',
+        '<aside class="case-sidebar-v2">',
+          '<p class="sidebar-label-v2">Project record</p>',
+          '<div><span>Category</span><strong>' + project.category + '</strong></div>',
+          '<div><span>Year</span><strong>' + project.year + '</strong></div>',
+          '<div><span>Status</span><strong>' + project.status + '</strong></div>',
+          project.contribution ? '<div class="sidebar-contribution-v2"><span>My contribution</span><p>' + project.contribution + '</p></div>' : '',
+        '</aside>',
+        '<main class="case-content-v2">',
+          renderFacts(project),
+          renderCaseSections(project),
+          renderVerification(project),
+          renderNextSteps(project),
+        '</main>',
+      '</div>',
+      '<div class="container">',
+        renderGallery(project),
+        renderRelated(project),
+      '</div>',
+    '</article>'
+  ].join('');
 
-          <aside class="project-sidebar deco-frame">
-            <div class="section-eyebrow">Project record</div>
-            <h2>${project.category}</h2>
-            <p>${project.summary}</p>
-            <div class="meta-row" style="margin:1rem 0;"><span class="meta-pill">${project.year}</span><span class="meta-pill">${project.status}</span></div>
-            <h2>Core skills</h2>
-            <div class="tag-row">${project.skills.map(skill => `<span class="tag">${skill}</span>`).join("")}</div>
-            ${project.links && project.links.length ? `<div class="sidebar-links"><h2>Relevant links</h2>${renderExternalLinks(project)}</div>` : ""}
-            <div class="project-actions" style="margin-top:1rem;">
-              <a class="btn btn-primary" href="${siteBase}index.html#project-directory">All projects</a>
-              ${cvLink("CV", "btn btn-secondary")}
-            </div>
-          </aside>
-        </div>
-
-        <section class="related-projects">
-          <div class="section-head"><div><div class="section-eyebrow">Related work</div><h2 class="section-title">Other projects</h2></div><p class="section-copy">More work from the same portfolio, prioritising similar technical areas where possible.</p></div>
-          <div class="projects-grid">${related.map(renderProjectCard).join("")}</div>
-        </section>
-      </div>
-    </section>`;
+  const updateHeader = () => $("#top").classList.toggle("is-scrolled", window.scrollY > 12);
+  updateHeader();
+  window.addEventListener("scroll", updateHeader, { passive: true });
 }
 
 renderPage();
