@@ -33,30 +33,32 @@ function renderHeader() {
   ].join('');
 }
 
-function renderSystemMap() {
-  const nodes = [
-    { id: 'sense', label: 'SENSE', x: 18, y: 32, detail: 'Sensors, signal acquisition, estimation and measurement evidence.' },
-    { id: 'control', label: 'CONTROL', x: 50, y: 16, detail: 'Feedback, state logic, embedded control and autonomous behaviour.' },
-    { id: 'power', label: 'POWER', x: 82, y: 34, detail: 'Power architecture, energy harvesting and hardware boundaries.' },
-    { id: 'verify', label: 'VERIFY', x: 50, y: 74, detail: 'Requirements, test, fault injection, measurement and traceability.' }
+function renderFieldControls() {
+  const items = [
+    ['sense', 'SENSE', 'Sensors, acquisition, estimation and measurement evidence.'],
+    ['control', 'CONTROL', 'Feedback, embedded logic and autonomous behaviour.'],
+    ['power', 'POWER', 'Power architecture, energy conversion and hardware boundaries.'],
+    ['verify', 'VERIFY', 'Requirements, testing, fault injection and traceability.']
   ];
   return [
-    '<div class="system-map" data-system-map>',
-      '<svg class="system-map-lines" viewBox="0 0 100 90" role="img" aria-label="Interactive engineering system map">',
-        '<path d="M18 32 L50 16 L82 34 L50 74 Z" />',
-        '<path d="M18 32 L82 34" />',
-        '<path d="M50 16 L50 74" />',
-      '</svg>',
-      nodes.map(node => '<button type="button" class="system-node" style="--x:' + node.x + '%;--y:' + node.y + '%" data-node="' + node.id + '" data-detail="' + node.detail + '"><span></span><strong>' + node.label + '</strong></button>').join(''),
-      '<div class="system-map-core"><span>ENGINEERING</span><strong>PHYSICAL → DIGITAL → VERIFIED</strong></div>',
-      '<p class="system-map-detail" aria-live="polite">Move through the system: sensing, control, power and verification.</p>',
+    '<div class="field-controls reveal" aria-label="Interactive engineering field controls">',
+      '<div class="field-controls-core">',
+        '<span class="mono">LIVE ENGINEERING FIELD</span>',
+        '<strong>PHYSICAL → DIGITAL → VERIFIED</strong>',
+      '</div>',
+      items.map((item, index) => [
+        '<button type="button" class="field-control field-control-' + item[0] + '" data-field-focus="' + item[0] + '" data-detail="' + item[2] + '">',
+          '<span>0' + (index + 1) + '</span><strong>' + item[1] + '</strong>',
+        '</button>'
+      ].join('')).join(''),
+      '<p class="field-control-detail" data-field-detail aria-live="polite">Move through the system. The field responds to the engineering domain you select.</p>',
     '</div>'
   ].join('');
 }
 
 function renderHero() {
   return [
-    '<section id="hero" class="ak-hero">',
+    '<section id="hero" class="ak-hero" data-field-mode="system">',
       '<div class="hero-atmos" aria-hidden="true"><span></span><span></span><span></span></div>',
       '<div class="shell">',
         '<div class="hero-topline reveal">',
@@ -77,7 +79,7 @@ function renderHero() {
               '<a class="ak-btn ak-btn-ghost magnetic" href="#about"><span>About me</span></a>',
             '</div>',
           '</div>',
-          renderSystemMap(),
+          renderFieldControls(),
         '</div>',
       '</div>',
     '</section>',
@@ -90,7 +92,7 @@ function renderHero() {
 function renderAbout() {
   const timeline = data.experience.slice(0, 4);
   return [
-    '<section id="about" class="ak-section ak-about">',
+    '<section id="about" class="ak-section ak-about" data-field-mode="ambient">',
       '<div class="shell">',
         '<div class="ak-sec-head reveal"><span class="ak-tag">About</span><span class="ak-line"></span><span class="ak-sec-title">Engineer first. Curious about the whole system.</span></div>',
         '<div class="about-grid">',
@@ -124,7 +126,7 @@ function renderAbout() {
 
 function renderSkills() {
   return [
-    '<section id="skills" class="ak-section ak-skills">',
+    '<section id="skills" class="ak-section ak-skills" data-field-mode="ambient">',
       '<div class="shell">',
         '<div class="ak-sec-head reveal"><span class="ak-tag">Capabilities</span><span class="ak-line"></span><span class="ak-sec-title">What I work with</span></div>',
         '<div class="service-list">',
@@ -166,8 +168,9 @@ function projectEvidence(project) {
 function renderProjectPanel(project, index) {
   const evidence = projectEvidence(project);
   const cover = evidence[0];
+  const fieldMode = ({'aurora-vx':'flight','advanced-2wd-robot-controller':'pcb','formula-student-electrical':'can','pysignalscope':'signal'}[project.id] || 'ambient');
   return [
-    '<article class="project-panel" style="--panel-index:' + index + '">',
+    '<article class="project-panel" data-field-mode="' + fieldMode + '" style="--panel-index:' + index + '">',
       '<div class="shell panel-grid">',
         '<div class="panel-visual reveal" data-tilt data-cursor="VIEW">',
           '<span class="panel-bgmark">' + (project.title.split(/\s+/).map(x=>x[0]).join('').slice(0,3).toUpperCase()) + '</span>',
@@ -219,7 +222,7 @@ function renderWork() {
 
 function renderWriting() {
   return [
-    '<section id="writing" class="ak-section ak-writing">',
+    '<section id="writing" class="ak-section ak-writing" data-field-mode="signal-soft">',
       '<div class="shell">',
         '<div class="ak-sec-head reveal"><span class="ak-tag">Writing</span><span class="ak-line"></span><span class="ak-sec-title">Engineering, explained in public.</span></div>',
         '<div class="writing-list">',
@@ -239,7 +242,7 @@ function renderWriting() {
 
 function renderContact() {
   return [
-    '<section id="contact" class="ak-contact">',
+    '<section id="contact" class="ak-contact" data-field-mode="ambient">',
       '<div class="contact-glow" aria-hidden="true"></div>',
       '<div class="shell">',
         '<div class="ak-sec-head reveal"><span class="ak-tag">Get in touch</span><span class="ak-line"></span></div>',
