@@ -29,7 +29,7 @@ function headMeta({ title, description, canonical, image = social, type = 'websi
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#101114" />
-  <meta name="color-scheme" content="light" />
+  <meta name="color-scheme" content="dark light" />
   <title>${escapeHtml(title)}</title>
   <meta name="description" content="${escapeHtml(description)}" />
   <link rel="canonical" href="${escapeHtml(canonical)}" />
@@ -78,6 +78,7 @@ const indexHtml = `<!DOCTYPE html>
   <script src="data/cv-link.js?v=${assetVersion}"></script>
   <script src="assets/app.js?v=${assetVersion}"></script>
   <script src="assets/motion.js?v=${assetVersion}"></script>
+  <script src="assets/field.js?v=${assetVersion}"></script>
 </body>
 </html>\n`;
 fs.writeFileSync(path.join(root, 'index.html'), indexHtml);
