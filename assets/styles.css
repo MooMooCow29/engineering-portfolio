@@ -1286,3 +1286,41 @@ html.light .home-template .ak-contact{background:#111218;color:#f4f1ea}
 @media(prefers-reduced-motion:reduce){
   .home-template .ak-marquee-track{animation:none}.home-template .reveal{opacity:1;transform:none;transition:none}.home-template .hero-char{transform:none;opacity:1;transition:none}
 }
+
+
+/* Case studies share the same cinematic template language */
+.case-template{
+  --ak-bg:#0b0c10;--ak-panel:#12141a;--ak-ink:#f2efe8;--ak-muted:#9ea2aa;
+  --ak-line:#2a2d34;--ak-accent:#ff6b3d;--ak-surface:#151820;
+  --bg:var(--ak-bg);--surface:var(--ak-panel);--ink:var(--ak-ink);--muted:var(--ak-muted);--line:var(--ak-line);--accent:var(--ak-accent);
+  background:var(--ak-bg);color:var(--ak-ink);
+}
+html.light .case-template{
+  --ak-bg:#f4f1ea;--ak-panel:#fffdf8;--ak-ink:#101116;--ak-muted:#686c74;--ak-line:#d7d2c8;--ak-accent:#e8552d;--ak-surface:#ece8df;
+}
+.case-template .site-header{background:color-mix(in srgb,var(--ak-bg) 90%,transparent);border-color:transparent}
+.case-template .site-header.is-scrolled{border-color:var(--ak-line);background:color-mix(in srgb,var(--ak-bg) 97%,transparent)}
+.case-template .shell{width:min(calc(100% - 3rem),1320px);margin-inline:auto}
+.case-template .ak-nav{min-height:78px;display:flex;align-items:center;gap:2rem}
+.case-template .ak-logo{display:flex;align-items:center;gap:.8rem;margin-right:auto}
+.case-template .ak-logo-mark{width:38px;height:38px;display:grid;place-items:center;border:1px solid var(--ak-line);font-family:var(--mono);font-size:.78rem}
+.case-template .ak-logo-copy{display:flex;flex-direction:column}.case-template .ak-logo-copy strong{font-size:.86rem}.case-template .ak-logo-copy small{font-size:.67rem;color:var(--ak-muted)}
+.case-template .ak-nav-links{display:flex;gap:1.2rem;align-items:center}.case-template .ak-nav-links a{font-size:.74rem;color:var(--ak-muted)}.case-template .ak-nav-links a:hover{color:var(--ak-ink)}
+.case-template .ak-theme{width:40px;height:40px;border:1px solid var(--ak-line);background:transparent;color:var(--ak-ink);cursor:pointer}
+.case-template .project-intro-v2{padding-top:3rem}.case-template .back-v2,.case-template .project-kicker-v2{color:var(--ak-muted)}
+.case-template .project-kicker-v2 span:first-child,.case-template .case-heading-v2 span,.case-template .sidebar-label-v2,.case-template .verification-row-v2 strong{color:var(--ak-accent)}
+.case-template .project-title-v2{color:var(--ak-ink)}
+.case-template .project-subtitle-v2{color:var(--ak-ink)}
+.case-template .project-intro-copy-v2>p,.case-template .case-copy-v2 p,.case-template .case-copy-v2 li,.case-template .case-sidebar-v2 p,.case-template .facts-v2 dt,.case-template .verification-row-v2 span,.case-template .verification-row-v2 p,.case-template .gallery-item-v2 figcaption,.case-template .related-list-v2 span,.case-template .related-list-v2 em{color:var(--ak-muted)}
+.case-template .project-skills-v2 span{border-color:var(--ak-line);color:var(--ak-muted)}
+.case-template .project-hero-media-v2{border-block:1px solid var(--ak-line);background:var(--ak-surface)}
+.case-template .case-block-v2,.case-template .facts-v2,.case-template .verification-v2,.case-template .related-list-v2,.case-template .case-sidebar-v2>div{border-color:var(--ak-line)}
+.case-template .boundary-v2{background:color-mix(in srgb,var(--ak-accent) 10%,var(--ak-panel));border-color:var(--ak-accent)}
+.case-template .boundary-v2 p{color:var(--ak-muted)}
+.case-template .gallery-item-v2{background:var(--ak-surface)}.case-template .gallery-item-v2 figcaption{background:var(--ak-bg)}
+.case-template .related-list-v2 a:hover strong{color:var(--ak-accent)}
+.case-template .site-footer{background:var(--ak-bg);color:var(--ak-ink);overflow:hidden}
+.case-template .footer-grid{display:grid;grid-template-columns:1.4fr .5fr .5fr;gap:2rem;padding:3rem 0}.case-template .footer-grid>div{display:flex;flex-direction:column;gap:.4rem}.case-template .footer-grid span,.case-template .footer-grid a{font-size:.7rem;color:var(--ak-muted)}
+.case-template .footer-word{font-size:clamp(5rem,19vw,18rem);font-weight:800;line-height:.7;letter-spacing:-.085em;color:color-mix(in srgb,var(--ak-ink) 12%,transparent);white-space:nowrap}
+.case-template .reveal{opacity:0;transform:translateY(22px);transition:opacity .65s ease var(--reveal-delay,0ms),transform .65s cubic-bezier(.16,1,.3,1) var(--reveal-delay,0ms)}.case-template .reveal.is-visible{opacity:1;transform:none}
+@media(max-width:720px){.case-template .shell{width:min(calc(100% - 2rem),1320px)}.case-template .ak-nav{flex-wrap:wrap;padding:.7rem 0}.case-template .ak-nav-links{order:3;width:100%;overflow:auto}.case-template .ak-logo-copy small{display:none}.case-template .footer-grid{grid-template-columns:1fr}}
