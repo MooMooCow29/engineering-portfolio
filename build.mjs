@@ -111,7 +111,7 @@ for (const project of data.projects) {
   <link rel="stylesheet" href="../../assets/styles.css?v=${assetVersion}" />
   <script type="application/ld+json">${JSON.stringify(projectLd)}</script>
 </head>
-<body>
+<body class="case-template">
   <a class="skip-link" href="#project-app">Skip to main content</a>
   <div class="page-shell">
     <header class="site-header" id="top"></header>
@@ -122,6 +122,7 @@ for (const project of data.projects) {
   <script src="../../data/content.js?v=${assetVersion}"></script>
   <script src="../../data/cv-link.js?v=${assetVersion}"></script>
   <script src="../../assets/project.js?v=${assetVersion}"></script>
+  <script src="../../assets/motion.js?v=${assetVersion}"></script>
 </body>
 </html>\n`;
   fs.writeFileSync(path.join(dir, 'index.html'), html);
