@@ -1324,3 +1324,202 @@ html.light .case-template{
 .case-template .footer-word{font-size:clamp(5rem,19vw,18rem);font-weight:800;line-height:.7;letter-spacing:-.085em;color:color-mix(in srgb,var(--ak-ink) 12%,transparent);white-space:nowrap}
 .case-template .reveal{opacity:0;transform:translateY(22px);transition:opacity .65s ease var(--reveal-delay,0ms),transform .65s cubic-bezier(.16,1,.3,1) var(--reveal-delay,0ms)}.case-template .reveal.is-visible{opacity:1;transform:none}
 @media(max-width:720px){.case-template .shell{width:min(calc(100% - 2rem),1320px)}.case-template .ak-nav{flex-wrap:wrap;padding:.7rem 0}.case-template .ak-nav-links{order:3;width:100%;overflow:auto}.case-template .ak-logo-copy small{display:none}.case-template .footer-grid{grid-template-columns:1fr}}
+
+
+/* =========================================================
+   LIVING ENGINEERING FIELD
+   Full-viewport interactive canvas. It stays behind content
+   and changes behaviour with the active engineering project.
+   ========================================================= */
+.home-template .engineering-field{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  opacity:.88;
+  transition:opacity .35s ease,filter .35s ease;
+}
+html.light .home-template .engineering-field{opacity:.62}
+.home-template .page-shell{
+  position:relative;
+  z-index:1;
+  background:transparent;
+}
+.home-template .site-header{
+  position:sticky;
+  z-index:100;
+}
+.home-template .ak-hero{
+  background:linear-gradient(180deg,color-mix(in srgb,var(--ak-bg) 18%,transparent),color-mix(in srgb,var(--ak-bg) 5%,transparent));
+}
+.home-template .ak-about{
+  background:linear-gradient(180deg,color-mix(in srgb,var(--ak-bg) 58%,transparent),color-mix(in srgb,var(--ak-bg) 78%,transparent));
+  backdrop-filter:blur(1px);
+}
+.home-template .ak-skills,
+.home-template .ak-writing{
+  background:color-mix(in srgb,var(--ak-panel) 88%,transparent);
+  backdrop-filter:blur(8px);
+}
+.home-template .project-panel{
+  background:color-mix(in srgb,var(--ak-bg) 86%,transparent);
+  backdrop-filter:blur(8px);
+}
+.home-template .project-panel:nth-child(even){
+  background:color-mix(in srgb,var(--ak-panel) 88%,transparent);
+}
+.home-template .more-projects{
+  position:relative;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--ak-bg) 84%,transparent),color-mix(in srgb,var(--ak-bg) 96%,transparent));
+}
+.home-template .ak-contact{
+  background:color-mix(in srgb,var(--ak-ink) 94%,transparent);
+  backdrop-filter:blur(10px);
+}
+
+/* Hero field interface: labels float over the canvas instead of
+   sitting inside a UI card. */
+.home-template .field-controls{
+  position:relative;
+  min-height:390px;
+  align-self:stretch;
+}
+.home-template .field-controls:before,
+.home-template .field-controls:after{
+  content:"";
+  position:absolute;
+  pointer-events:none;
+}
+.home-template .field-controls:before{
+  inset:9% 7% 16%;
+  border:1px solid color-mix(in srgb,var(--ak-line) 62%,transparent);
+  border-radius:50%;
+  transform:rotate(-9deg) scale(.82,.58);
+  opacity:.32;
+}
+.home-template .field-controls:after{
+  left:50%;
+  top:12%;
+  bottom:18%;
+  width:1px;
+  background:linear-gradient(transparent,color-mix(in srgb,var(--ak-accent-2) 32%,transparent),transparent);
+}
+.home-template .field-controls-core{
+  position:absolute;
+  left:50%;
+  top:48%;
+  transform:translate(-50%,-50%);
+  width:min(230px,48%);
+  text-align:center;
+  pointer-events:none;
+}
+.home-template .field-controls-core .mono{
+  color:var(--ak-accent);
+}
+.home-template .field-controls-core strong{
+  display:block;
+  margin-top:.48rem;
+  font-size:.78rem;
+  line-height:1.5;
+  letter-spacing:.035em;
+}
+.home-template .field-control{
+  position:absolute;
+  display:flex;
+  align-items:center;
+  gap:.55rem;
+  padding:.35rem .45rem;
+  border:0;
+  background:color-mix(in srgb,var(--ak-bg) 45%,transparent);
+  color:var(--ak-muted);
+  cursor:pointer;
+  transition:color .18s ease,transform .18s ease,background .18s ease;
+}
+.home-template .field-control span{
+  color:var(--ak-accent);
+  font-family:var(--mono);
+  font-size:.55rem;
+}
+.home-template .field-control strong{
+  font-family:var(--mono);
+  font-size:.63rem;
+  letter-spacing:.09em;
+}
+.home-template .field-control:hover,
+.home-template .field-control:focus-visible,
+.home-template .field-control.is-active{
+  color:var(--ak-ink);
+  background:color-mix(in srgb,var(--ak-bg) 76%,transparent);
+  transform:translateY(-2px);
+}
+.home-template .field-control-sense{left:4%;top:34%}
+.home-template .field-control-control{left:43%;top:7%}
+.home-template .field-control-power{right:3%;top:37%}
+.home-template .field-control-verify{left:45%;bottom:18%}
+.home-template .field-control-detail{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  margin:0;
+  padding-top:.85rem;
+  border-top:1px solid color-mix(in srgb,var(--ak-line) 65%,transparent);
+  color:var(--ak-muted);
+  font-size:.72rem;
+  line-height:1.55;
+}
+
+/* The project image stays readable while the active engineering
+   field is visible around it. */
+.home-template .panel-visual{
+  box-shadow:0 28px 80px rgba(0,0,0,.22);
+}
+html.light .home-template .panel-visual{
+  box-shadow:0 24px 70px rgba(30,30,30,.10);
+}
+
+/* Subtle mode-specific atmosphere without turning it into a HUD. */
+.home-template:has(.project-panel[data-field-mode="flight"]:hover) .engineering-field{filter:saturate(1.08)}
+.home-template:has(.project-panel[data-field-mode="pcb"]:hover) .engineering-field{filter:contrast(1.05)}
+.home-template:has(.project-panel[data-field-mode="signal"]:hover) .engineering-field{filter:brightness(1.08)}
+
+/* Keep readable text above the ambient field. */
+.home-template .hero-topline,
+.home-template .hero-name-wrap,
+.home-template .hero-bottom,
+.home-template .ak-sec-head,
+.home-template .about-grid,
+.home-template .service-list,
+.home-template .panel-grid,
+.home-template .more-head,
+.home-template .more-grid,
+.home-template .writing-list,
+.home-template .contact-head,
+.home-template .contact-copy,
+.home-template .contact-links{
+  position:relative;
+  z-index:2;
+}
+
+@media(max-width:1000px){
+  .home-template .field-controls{min-height:340px}
+}
+@media(max-width:720px){
+  .home-template .engineering-field{opacity:.52}
+  html.light .home-template .engineering-field{opacity:.38}
+  .home-template .field-controls{min-height:285px}
+  .home-template .field-control-control{left:38%;top:4%}
+  .home-template .field-control-verify{left:39%;bottom:20%}
+  .home-template .field-control-detail{font-size:.67rem}
+  .home-template .project-panel,
+  .home-template .project-panel:nth-child(even){
+    background:color-mix(in srgb,var(--ak-bg) 94%,transparent);
+    backdrop-filter:blur(5px);
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .home-template .engineering-field{opacity:.38}
+  .home-template .field-control{transition:none}
+}
