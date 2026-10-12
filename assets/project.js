@@ -18,31 +18,34 @@ function getProject() {
 }
 
 function renderHeader() {
-  const header = $("#top");
+  const header = document.getElementById("top");
   header.innerHTML = [
-    '<div class="nav-wrap">',
-      '<a class="brand-v2" href="' + siteBase + 'index.html" aria-label="Karanveer Singh portfolio home">',
-        '<span class="brand-v2-name">' + data.profile.name + '</span>',
-        '<span class="brand-v2-role">Electrical &amp; Electronic Engineering</span>',
+    '<div class="ak-nav shell">',
+      '<a class="ak-logo" href="' + siteBase + 'index.html" aria-label="Return to portfolio home">',
+        '<span class="ak-logo-mark">KS</span>',
+        '<span class="ak-logo-copy"><strong>' + data.profile.name + '</strong><small>Electrical &amp; Electronic Engineering</small></span>',
       '</a>',
-      '<nav class="nav-v2" aria-label="Project navigation">',
+      '<nav class="ak-nav-links" aria-label="Project navigation">',
         '<a href="' + siteBase + 'index.html#work">Work</a>',
-        '<a href="' + siteBase + 'index.html#experience">Experience</a>',
+        '<a href="' + siteBase + 'index.html#skills">Capabilities</a>',
         '<a href="' + siteBase + 'index.html#writing">Writing</a>',
-        '<a href="' + siteBase + 'index.html#about">About</a>',
+        '<a href="' + siteBase + 'index.html#contact">Contact</a>',
         cvLink("CV"),
       '</nav>',
+      '<button class="ak-theme" type="button" aria-label="Toggle colour theme" data-theme-toggle><span aria-hidden="true">◐</span></button>',
     '</div>'
   ].join('');
 }
 
 function renderFooter() {
-  $("#footer").innerHTML = [
-    '<div class="container footer-v2">',
-      '<span>© ' + new Date().getFullYear() + ' ' + data.profile.name + '</span>',
-      '<span>Project case study · evidence-led engineering portfolio</span>',
-      '<a href="' + siteBase + 'index.html#work">All work ↑</a>',
-    '</div>'
+  const footer = document.getElementById("footer");
+  footer.innerHTML = [
+    '<div class="shell footer-grid">',
+      '<div><strong>Engineering evidence, deliberately.</strong><span>© ' + new Date().getFullYear() + ' ' + data.profile.name + '</span></div>',
+      '<div><a href="' + siteBase + 'index.html">Home</a><a href="' + siteBase + 'index.html#work">Work</a><a href="' + siteBase + 'index.html#writing">Writing</a></div>',
+      '<div><a href="https://github.com/MooMooCow29" target="_blank" rel="noreferrer">GitHub ↗</a><a href="https://www.linkedin.com/in/karan-singh-6901a7246/" target="_blank" rel="noreferrer">LinkedIn ↗</a></div>',
+    '</div>',
+    '<div class="footer-word" aria-hidden="true">KARANVEER</div>'
   ].join('');
 }
 
