@@ -23,6 +23,7 @@
   }
 
   function initReveals() {
+    document.querySelectorAll('.case-template .case-block-v2, .case-template .gallery-item-v2, .case-template .project-intro-grid-v2, .case-template .project-hero-media-v2, .case-template .related-v2').forEach(el => el.classList.add('reveal'));
     const items = [...document.querySelectorAll('.reveal')];
     if (!items.length) return;
     if (reduced || !('IntersectionObserver' in window)) {
