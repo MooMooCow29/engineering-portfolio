@@ -67,7 +67,7 @@ const indexHtml = `<!DOCTYPE html>
   <link rel="stylesheet" href="assets/styles.css?v=${assetVersion}" />
   <script type="application/ld+json">${JSON.stringify(personLd)}</script>
 </head>
-<body>
+<body class="home-template">
   <a class="skip-link" href="#app">Skip to main content</a>
   <div class="page-shell">
     <header class="site-header" id="top"></header>
@@ -77,6 +77,7 @@ const indexHtml = `<!DOCTYPE html>
   <script src="data/content.js?v=${assetVersion}"></script>
   <script src="data/cv-link.js?v=${assetVersion}"></script>
   <script src="assets/app.js?v=${assetVersion}"></script>
+  <script src="assets/motion.js?v=${assetVersion}"></script>
 </body>
 </html>\n`;
 fs.writeFileSync(path.join(root, 'index.html'), indexHtml);
