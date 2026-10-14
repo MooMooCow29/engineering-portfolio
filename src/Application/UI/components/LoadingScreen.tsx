@@ -32,6 +32,12 @@ const LoadingScreen: React.FC<LoadingProps> = () => {
     window.addEventListener('resize', onResize);
 
     useEffect(() => {
+        // Signal that Henry's original React loading interface has actually
+        // mounted. Only then remove the plain-HTML bootstrap screen.
+        // @ts-ignore
+        window.__portfolioReactMounted = true;
+        document.getElementById('preboot')?.remove();
+
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.has('debug')) {
             start();
