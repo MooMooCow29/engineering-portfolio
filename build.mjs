@@ -5,22 +5,16 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 const dataPath = path.join(root, 'data', 'content.js');
-const updatesPath = path.join(root, 'data', 'updates.js');
-const recentProjectsPath = path.join(root, 'data', 'recent-projects.js');
 const code = fs.readFileSync(dataPath, 'utf8');
-const updatesCode = fs.readFileSync(updatesPath, 'utf8');
-const recentProjectsCode = fs.readFileSync(recentProjectsPath, 'utf8');
 const sandbox = { window: {} };
 vm.createContext(sandbox);
 vm.runInContext(code, sandbox);
-vm.runInContext(updatesCode, sandbox);
-vm.runInContext(recentProjectsCode, sandbox);
 const data = sandbox.window.PORTFOLIO_DATA;
-if (!data) throw new Error('PORTFOLIO_DATA was not found after loading the portfolio data/update layers');
+if (!data) throw new Error('PORTFOLIO_DATA was not found after loading data/content.js');
 
 const siteUrl = data.profile.siteUrl.endsWith('/') ? data.profile.siteUrl : `${data.profile.siteUrl}/`;
 const social = `${siteUrl}assets/social-preview.jpg`;
-const assetVersion = '20261005-pcbway2';
+const assetVersion = '20261014-cinematic';
 const escapeHtml = (value = '') => String(value)
   .replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
   .replaceAll('"', '&quot;').replaceAll("'", '&#039;');
@@ -34,8 +28,8 @@ function headMeta({ title, description, canonical, image = social, type = 'websi
   return `
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#0c2942" />
-  <meta name="color-scheme" content="light" />
+  <meta name="theme-color" content="#101114" />
+  <meta name="color-scheme" content="dark light" />
   <title>${escapeHtml(title)}</title>
   <meta name="description" content="${escapeHtml(description)}" />
   <link rel="canonical" href="${escapeHtml(canonical)}" />
@@ -73,7 +67,7 @@ const indexHtml = `<!DOCTYPE html>
   <link rel="stylesheet" href="assets/styles.css?v=${assetVersion}" />
   <script type="application/ld+json">${JSON.stringify(personLd)}</script>
 </head>
-<body>
+<body class="home-template">
   <a class="skip-link" href="#app">Skip to main content</a>
   <div class="page-shell">
     <header class="site-header" id="top"></header>
@@ -81,10 +75,11 @@ const indexHtml = `<!DOCTYPE html>
     <footer class="site-footer" id="footer"></footer>
   </div>
   <script src="data/content.js?v=${assetVersion}"></script>
-  <script src="data/updates.js?v=${assetVersion}"></script>
-  <script src="data/recent-projects.js?v=${assetVersion}"></script>
   <script src="data/cv-link.js?v=${assetVersion}"></script>
   <script src="assets/app.js?v=${assetVersion}"></script>
+  <script src="assets/motion.js?v=${assetVersion}"></script>
+  <script src="assets/field.js?v=${assetVersion}"></script>
+  <script src="assets/lab.js?v=${assetVersion}"></script>
 </body>
 </html>\n`;
 fs.writeFileSync(path.join(root, 'index.html'), indexHtml);
@@ -118,7 +113,7 @@ for (const project of data.projects) {
   <link rel="stylesheet" href="../../assets/styles.css?v=${assetVersion}" />
   <script type="application/ld+json">${JSON.stringify(projectLd)}</script>
 </head>
-<body>
+<body class="case-template">
   <a class="skip-link" href="#project-app">Skip to main content</a>
   <div class="page-shell">
     <header class="site-header" id="top"></header>
@@ -127,10 +122,9 @@ for (const project of data.projects) {
   </div>
   <script>window.PROJECT_ID=${JSON.stringify(project.id)};window.SITE_BASE="../../";</script>
   <script src="../../data/content.js?v=${assetVersion}"></script>
-  <script src="../../data/updates.js?v=${assetVersion}"></script>
-  <script src="../../data/recent-projects.js?v=${assetVersion}"></script>
   <script src="../../data/cv-link.js?v=${assetVersion}"></script>
   <script src="../../assets/project.js?v=${assetVersion}"></script>
+  <script src="../../assets/motion.js?v=${assetVersion}"></script>
 </body>
 </html>\n`;
   fs.writeFileSync(path.join(dir, 'index.html'), html);
