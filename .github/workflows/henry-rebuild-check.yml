@@ -1,0 +1,85 @@
+name: Henry-base rebuild check
+
+on:
+  push:
+    branches:
+      - henry-base-rebuild
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Build immersive portfolio
+        run: npm run build
+
+      - name: Verify output
+        run: |
+          test -f public/index.html
+          test -f public/models/Computer/computer_setup.glb
+          test -f public/os/index.html
+          test -f public/projects/aurora-vx/index.html
+          grep -q "preboot" public/index.html
+          echo "Build output verified"
+
+      - name: Browser smoke test
+        run: |
+          python3 -m http.server 4173 --directory public >/tmp/portfolio-server.log 2>&1 &
+          SERVER_PID=$!
+          sleep 2
+          google-chrome --headless=new --no-sandbox --disable-dev-shm-usage --enable-webgl --ignore-gpu-blocklist --virtual-time-budget=8000 --window-size=1600,900 --dump-dom http://127.0.0.1:4173 > /tmp/portfolio-dom.html || true
+          google-chrome --headless=new --no-sandbox --disable-dev-shm-usage --enable-webgl --ignore-gpu-blocklist --virtual-time-budget=8000 --window-size=1600,900 --screenshot=/tmp/portfolio.png http://127.0.0.1:4173 || true
+          kill $SERVER_PID || true
+          echo "DOM text snapshot:"
+          sed -E 's/<[^>]+>/ /g' /tmp/portfolio-dom.html | tr -s ' ' | head -c 3000
+          test -s /tmp/portfolio.png
+
+      - name: Post-start Chrome interaction test
+        run: |
+          python3 -m http.server 4175 --directory public >/tmp/portfolio-interaction-server.log 2>&1 &
+          SERVER_PID=$!
+          sleep 2
+          npm install --no-save playwright@1.48.2
+          npx playwright install chromium
+          node scripts/interaction-smoke.mjs
+          kill $SERVER_PID || true
+
+      - name: Firefox smoke test
+        continue-on-error: true
+        run: |
+          python3 -m http.server 4174 --directory public >/tmp/portfolio-firefox-server.log 2>&1 &
+          SERVER_PID=$!
+          sleep 2
+          npx -y playwright@1.48.2 install firefox
+          npx -y playwright@1.48.2 screenshot --browser firefox --wait-for-timeout 8000 --viewport-size "1600,900" http://127.0.0.1:4174 /tmp/portfolio-firefox.png
+          kill $SERVER_PID || true
+
+      - name: Upload browser screenshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-smoke
+          path: |
+            /tmp/portfolio.png
+            /tmp/portfolio-dom.html
+            /tmp/portfolio-server.log
+            /tmp/portfolio-firefox.png
+            /tmp/portfolio-firefox-server.log
+            /tmp/portfolio-before-start.png
+            /tmp/portfolio-after-start.png
+            /tmp/portfolio-interaction.log
+            /tmp/portfolio-interaction-server.log
+            static/models/Computer/baked_computer.jpg
+            static/models/Computer/computer_setup.glb

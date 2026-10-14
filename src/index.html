@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      min-height: 100%;
+      overflow: hidden;
+      background-color: rgb(0, 0, 0);
+      margin: 0;
+    }
+
+    #css {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    #webgl {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    #overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    #ui-app {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-sizing: border-box;
+    }
+
+    #ui {
+      position: fixed;
+      z-index: 100;
+      overflow: hidden;
+      inset: 0;
+      width: auto;
+      height: auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-sizing: border-box;
+    }
+
+    #monitor-videos {
+      pointer-events: none;
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+      top: 0;
+      left: 0;
+    }
+
+    #css {
+      cursor: pointer;
+    }
+
+    #ui-interactive {
+      position: fixed;
+      z-index: 110;
+      top: 0;
+      left: 0;
+      width: 256px;
+      min-height: 1px;
+    }
+
+    video {
+      position: absolute;
+      top: 0;
+      pointer-events: none;
+    }
+  </style>
+
+  <title>Karanveer Singh - Engineering Portfolio</title>
+  <meta name="title" content="Karanveer Singh - Electrical & Electronic Engineering">
+  <meta name="description" content="Interactive engineering portfolio for Karanveer Singh, covering embedded systems, electronics, control, robotics, energy and verification.">
+  <link rel="canonical" href="https://moomoocow29.github.io/engineering-portfolio/">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://moomoocow29.github.io/engineering-portfolio/">
+  <meta property="og:title" content="Karanveer Singh - Electrical & Electronic Engineering">
+  <meta property="og:description" content="Interactive engineering portfolio covering embedded systems, electronics, control, robotics, energy and verification.">
+  <meta property="og:image" content="https://moomoocow29.github.io/engineering-portfolio/assets/social-preview.jpg">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://moomoocow29.github.io/engineering-portfolio/">
+  <meta name="twitter:title" content="Karanveer Singh - Electrical & Electronic Engineering">
+  <meta name="twitter:description" content="Interactive engineering portfolio covering embedded systems, electronics, control, robotics, energy and verification.">
+  <meta name="twitter:image" content="https://moomoocow29.github.io/engineering-portfolio/assets/social-preview.jpg">
+
+  <link rel="shortcut icon" href="../assets/favicon.svg" type="image/svg+xml">
+</head>
+
+<body>
+  <div id="preboot" style="position:fixed;inset:0;z-index:99999;background:#000;color:#fff;font:16px monospace;padding:48px;box-sizing:border-box;">
+    <p style="margin:0 0 10px;color:#00ff00;"><b>Singh, Karanveer Engineering.</b></p>
+    <p style="margin:0 0 8px;">KSBIOS (C)2026 Karanveer Singh</p>
+    <p style="margin:0 0 8px;">INITIALISING ENGINEERING PORTFOLIO...</p>
+    <p id="boot-watchdog" style="margin:0;color:#888;">Waiting for application bundle</p>
+  </div>
+  <script>
+    window.__portfolioBootStarted = Date.now();
+    window.addEventListener('error', function (event) {
+      var el = document.getElementById('boot-watchdog');
+      if (el) {
+        el.style.color = '#ff6b6b';
+        el.textContent = 'Startup error: ' + (event.message || 'unknown error');
+      }
+    });
+    window.addEventListener('unhandledrejection', function (event) {
+      var el = document.getElementById('boot-watchdog');
+      if (el) {
+        el.style.color = '#ff6b6b';
+        var reason = event.reason && event.reason.message ? event.reason.message : event.reason;
+        el.textContent = 'Startup error: ' + (reason || 'unhandled promise rejection');
+      }
+    });
+    window.setTimeout(function () {
+      var el = document.getElementById('boot-watchdog');
+      if (el && !window.__portfolioReactMounted) {
+        el.style.color = '#ffd166';
+        el.textContent = 'Application is taking longer than expected to mount.';
+      }
+    }, 4000);
+  </script>
+  <div id="css"></div>
+  <div id="webgl"></div>
+  <div id="overlay"></div>
+  <div id="ui-interactive"></div>
+  <div id="ui"></div>
+  <div id="monitor-videos">
+    <video id="video-1" muted loop autoplay width="0" height="0" src="../static/textures/monitor/video/base-static.mp4"
+      style="opacity: 0;"></video>
+    <video id="video-2" muted loop autoplay width="0" height="0"
+      src="../static/textures/monitor/video/static-texture-layer.mp4" style="opacity: 0;"></video>
+  </div>
+</body>
+
+</html>

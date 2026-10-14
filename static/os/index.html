@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>KaranOS — Karanveer Singh Engineering Workstation</title>
+<style>
+:root{--bg:#11202b;--panel:#d6d7d1;--ink:#101214;--navy:#182c38;--blue:#284f64;--orange:#d75b37;--line:#66737a;--shadow:#081017}
+*{box-sizing:border-box}html,body{width:100%;height:100%;margin:0;overflow:hidden;font-family:"Courier New",monospace;background:#0b141b;color:var(--ink)}
+button,a{font:inherit}
+.card{font:inherit;text-align:left;cursor:pointer;width:100%}
+.project-detail{display:none}
+.project-detail.active{display:block}
+.project-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid #9ba4a4}
+.project-back{border:2px outset #e8e9e4;background:#d9d9d3;color:#172229;padding:6px 9px;font-size:9px;cursor:pointer}
+.project-back:active{border-style:inset}
+.project-path{color:#59686f;font-size:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.project-layout{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(230px,.7fr);gap:14px;margin-top:14px}
+.project-cover{border:1px solid #7c898d;background:#cfd4d0;min-height:190px;overflow:hidden}
+.project-cover img{display:block;width:100%;height:100%;max-height:300px;object-fit:cover}
+.project-meta{border:1px solid #8d9898;background:#d4d7d2;padding:10px}
+.project-meta dl{display:grid;grid-template-columns:90px 1fr;gap:7px 9px;margin:0}
+.project-meta dt{font-size:7px;color:#775445;text-transform:uppercase}
+.project-meta dd{margin:0;font-size:8px;line-height:1.45;color:#303b40}
+.project-section{margin-top:14px;border-top:1px solid #a4adab;padding-top:11px}
+.project-section h2{font-family:Arial,sans-serif;font-size:15px;margin:0 0 7px;color:#152027}
+.project-section p{font-size:9px;line-height:1.6;color:#4e5b60;margin:0 0 8px}
+.project-section ul{margin:6px 0 0;padding-left:18px;color:#4e5b60;font-size:9px;line-height:1.55}
+.project-section li+li{margin-top:4px}
+.project-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:10px}
+.project-stat{border:1px solid #9aa4a3;background:#f1f2ed;padding:8px}
+.project-stat b{display:block;color:#a4442a;font-size:11px;font-family:Arial,sans-serif}
+.project-stat span{display:block;margin-top:3px;color:#566267;font-size:7px;line-height:1.35}
+.project-links{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.project-links a{border:1px solid #7d898a;background:#e2e4df;color:#18242a;text-decoration:none;padding:5px 7px;font-size:8px}
+.project-links a:hover{border-color:#a4442a;color:#a4442a}
+@media(max-width:760px){.project-layout{grid-template-columns:1fr}.project-stats{grid-template-columns:1fr}}
+.desktop{position:relative;width:100%;height:100%;background:
+linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px),
+radial-gradient(circle at 68% 28%,#244b5d 0,#183441 38%,#10232d 72%,#0b171e 100%);
+background-size:32px 32px,32px 32px,auto}
+.boot-label{position:absolute;top:18px;left:22px;color:#d9e4e7;font-size:11px;letter-spacing:.08em}
+.icons{position:absolute;left:18px;top:62px;display:grid;gap:16px;width:100px}
+.icon{border:0;background:transparent;color:#eef4f5;display:grid;justify-items:center;gap:5px;cursor:pointer;text-shadow:0 1px #000}
+.icon-glyph{width:48px;height:48px;display:grid;place-items:center;border:2px solid #9eb1b8;background:#d7ddd9;color:#15242d;box-shadow:4px 4px 0 rgba(0,0,0,.28);font-weight:700}
+.icon:hover .icon-glyph{background:#fff;border-color:#f07a55}.icon span:last-child{font-size:9px}
+.window{position:absolute;left:132px;right:28px;top:50px;bottom:48px;background:#d8d9d3;border:2px solid #dfe0db;box-shadow:0 0 0 2px #1b272d,14px 18px 0 rgba(0,0,0,.24);display:flex;flex-direction:column}
+.titlebar{height:35px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 8px;background:#1c3947;color:#edf4f5;border-bottom:2px solid #0a151c}
+.titlebar strong{font-size:10px;letter-spacing:.08em}.controls{display:flex;gap:5px}.controls i{width:13px;height:13px;background:#d6d7d1;border:1px solid #0b151a;box-shadow:inset 1px 1px #fff}
+.workspace{display:grid;grid-template-columns:190px 1fr;min-height:0;flex:1}
+.sidebar{background:#bfc6c4;border-right:2px solid #66737a;padding:10px}
+.sidebar-head{font-size:9px;color:#32444c;margin:3px 4px 9px}
+.nav{display:grid;gap:4px}.nav button{border:1px solid transparent;background:transparent;text-align:left;padding:7px 8px;font-size:10px;cursor:pointer;color:#172229}
+.nav button:hover,.nav button.active{background:#1c3947;color:#fff;border-color:#071116}
+.system{margin-top:16px;border:1px inset #899596;background:#d6d7d1;padding:8px;font-size:8px;line-height:1.6;color:#3a494f}
+.main{overflow:auto;padding:18px 20px 26px;background:#e6e6df}
+.panel{display:none}.panel.active{display:block}
+.kicker{font-size:9px;color:#a63f24;font-weight:700;letter-spacing:.08em}
+h1{font-family:Arial,sans-serif;font-size:30px;letter-spacing:-.04em;margin:7px 0 10px;color:#10191e}
+.lead{font-family:Arial,sans-serif;max-width:720px;font-size:12px;line-height:1.65;color:#3b484e;margin:0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:16px}
+.card{display:block;border:1px solid #738087;background:#f5f5ef;padding:11px;text-decoration:none;color:#162027;box-shadow:3px 3px 0 #a3aaa7;transition:.12s}
+.card:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 #9ba4a1;border-color:#a4442a}.card small{display:block;color:#a4442a;font-size:8px;font-weight:700}.card h3{font-family:Arial,sans-serif;margin:5px 0;font-size:15px}.card p{font-size:9px;line-height:1.5;margin:0;color:#546169}
+.tagrow{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}.tagrow span{font-size:7px;border:1px solid #9ea9a9;padding:3px 4px;background:#e1e4df}
+.rows{margin-top:15px;border-top:1px solid #9ba4a4}.row{display:grid;grid-template-columns:100px 1fr;gap:14px;padding:10px 0;border-bottom:1px solid #adb5b3}.row b{font-size:8px;color:#a4442a}.row strong{font-family:Arial,sans-serif;font-size:12px}.row p{font-size:9px;color:#5b666b;line-height:1.5;margin:3px 0 0}
+.links{display:grid;gap:7px;margin-top:16px}.links a{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid #aab2b1;color:#172229;text-decoration:none;font-size:10px}.links a:hover{color:#a4442a}
+.taskbar{position:absolute;left:0;right:0;bottom:0;height:34px;background:#bfc6c4;border-top:2px solid #e5e7e2;display:flex;align-items:center;justify-content:space-between;padding:0 8px}
+.start{background:#d9d9d3;border:2px outset #e8e9e4;padding:4px 10px;font-weight:700;font-size:9px}.clock{font-size:9px;border:1px inset #8a9698;padding:4px 7px}
+@media(max-width:760px){.icons{display:none}.window{left:12px;right:12px;top:40px}.workspace{grid-template-columns:145px 1fr}.grid{grid-template-columns:1fr}h1{font-size:24px}}
+</style>
+</head>
+<body>
+<div class="desktop">
+<div class="boot-label">KARAN OS / ENGINEERING WORKSTATION</div>
+<div class="icons">
+<button class="icon" data-open="projects"><span class="icon-glyph">P</span><span>Projects</span></button>
+<button class="icon" data-open="about"><span class="icon-glyph">KS</span><span>About</span></button>
+<button class="icon" data-open="writing"><span class="icon-glyph">W</span><span>Writing</span></button>
+</div>
+
+<section class="window">
+<div class="titlebar"><strong>C:\PORTFOLIO\ENGINEERING.EXE</strong><div class="controls"><i></i><i></i><i></i></div></div>
+<div class="workspace">
+<aside class="sidebar">
+<div class="sidebar-head">WORKSTATION</div>
+<nav class="nav">
+<button class="active" data-tab="projects">01 Projects</button>
+<button data-tab="about">02 About</button>
+<button data-tab="experience">03 Experience</button>
+<button data-tab="writing">04 Writing</button>
+<button data-tab="links">05 Links</button>
+</nav>
+<div class="system">MEng EEE<br>UEA / 2024–2028<br><br>Focus:<br>embedded systems<br>electronics<br>control<br>verification</div>
+</aside>
+<main class="main">
+<div class="panel active" data-panel="projects">
+<div class="kicker">SELECTED ENGINEERING WORK</div>
+<h1>Open a project.</h1>
+<p class="lead">Projects are documented as engineering case studies: problem, architecture, decisions, evidence, limitations and the next technical gate.</p>
+<div class="grid">
+<button class="card" type="button" data-project="aurora-vx"><small>01 / CONTROL + ASSURANCE</small><h3>AURORA-VX</h3><p>eVTOL digital twin, embedded controller and traceable PIL/HIL assurance pipeline.</p><div class="tagrow"><span>SIMULINK</span><span>EMBEDDED C</span><span>VERIFY</span></div></button>
+<button class="card" type="button" data-project="advanced-2wd-robot-controller"><small>02 / PCB + ROBOTICS</small><h3>2WD Robot Controller</h3><p>Custom controller PCB documented through failures, redesign and manufacturing evidence.</p><div class="tagrow"><span>KICAD</span><span>POWER</span><span>PCB</span></div></button>
+<button class="card" type="button" data-project="pysignalscope"><small>03 / OPEN SOURCE</small><h3>pySignalScope</h3><p>Waveform numerics, timebase validation and regression-test engineering.</p><div class="tagrow"><span>PYTHON</span><span>SIGNALS</span><span>TEST</span></div></button>
+<button class="card" type="button" data-project="rf-energy-harvesting-bci"><small>04 / ENERGY RESEARCH</small><h3>Batteryless ePaper</h3><p>Harvested-energy operation of bistable displays for battery-free update systems.</p><div class="tagrow"><span>EPAPER</span><span>POWER</span><span>RESEARCH</span></div></button>
+<button class="card" type="button" data-project="formula-student-electrical"><small>05 / VEHICLE ELECTRONICS</small><h3>Formula Student</h3><p>Low-voltage architecture, CAN integration, debugging and electrical safety interfaces.</p><div class="tagrow"><span>CAN</span><span>LV</span><span>TEST</span></div></button>
+<button class="card" type="button" data-project="emg-controlled-rc-car"><small>06 / BIOMEDICAL ROBOTICS</small><h3>EMG-Controlled RC Car</h3><p>Muscle-signal interface translated into control commands for a mobile robotic platform.</p><div class="tagrow"><span>EMG</span><span>SENSING</span><span>ROBOTICS</span></div></button>
+</div>
+</div>
+
+<div class="project-detail" data-project-detail>
+  <div class="project-toolbar">
+    <button class="project-back" type="button" data-project-back>← BACK TO PROJECTS</button>
+    <span class="project-path" data-project-path>C:\PORTFOLIO\PROJECTS</span>
+  </div>
+  <div data-project-content></div>
+</div>
+
+<div class="panel" data-panel="about">
+<div class="kicker">ABOUT</div><h1>Karanveer Singh.</h1>
+<p class="lead">MEng Electrical &amp; Electronic Engineering student at the University of East Anglia. I am most interested in work where electronics, embedded software, sensing, control and physical systems have to agree.</p>
+<div class="rows">
+<div class="row"><b>METHOD</b><div><strong>Evidence-led iteration</strong><p>Build, instrument, test, document what failed, and use that evidence to define the next design gate.</p></div></div>
+<div class="row"><b>INTERESTS</b><div><strong>Embedded systems, energy, control and robotics</strong><p>Projects range from custom PCBs and vehicle electronics to energy harvesting, control assurance and open-source engineering software.</p></div></div>
+<div class="row"><b>GOAL</b><div><strong>Build useful engineering systems</strong><p>Long term, I want to combine deep engineering capability with entrepreneurship and technical leadership.</p></div></div>
+</div>
+</div>
+
+<div class="panel" data-panel="experience">
+<div class="kicker">EXPERIENCE</div><h1>Engineering in practice.</h1>
+<div class="rows">
+<div class="row"><b>2026</b><div><strong>MBDA — Electronics Engineering Placement</strong><p>Circuit work, PCB/manufacturing workflows, electronic test, inspection and technical reporting.</p></div></div>
+<div class="row"><b>2025–26</b><div><strong>Formula Student UEA — Electrical Systems Lead</strong><p>LV architecture, CAN, debugging, signal integrity and safety-related electrical work.</p></div></div>
+<div class="row"><b>2026–27</b><div><strong>UEA Innovators — Vice-President</strong><p>Technical projects, workshops, hackathon activity and engineering community leadership.</p></div></div>
+</div>
+</div>
+
+<div class="panel" data-panel="writing">
+<div class="kicker">TECHNICAL WRITING</div><h1>Explain the engineering.</h1>
+<div class="links">
+<a target="_top" href="https://medium.com/@ks683557"><span>I Designed a Custom Robot Controller PCB from Scratch</span><span>↗</span></a>
+<a target="_top" href="https://medium.com/@ks683557"><span>PID Control from First Principles</span><span>↗</span></a>
+<a target="_top" href="https://medium.com/@ks683557"><span>Why Stealth Is an Electrical Engineering Problem</span><span>↗</span></a>
+<a target="_top" href="https://medium.com/@ks683557"><span>What an FEA Solver Is Actually Doing</span><span>↗</span></a>
+</div>
+</div>
+
+<div class="panel" data-panel="links">
+<div class="kicker">EXTERNAL LINKS</div><h1>Continue outside the workstation.</h1>
+<div class="grid">
+<a class="card" target="_top" href="https://github.com/MooMooCow29"><small>GITHUB</small><h3>Repositories</h3><p>Code, documentation and project evidence.</p></a>
+<a class="card" target="_top" href="https://www.linkedin.com/in/karan-singh-6901a7246/"><small>LINKEDIN</small><h3>Professional profile</h3><p>Experience, education and contact.</p></a>
+<a class="card" target="_top" href="https://medium.com/@ks683557"><small>MEDIUM</small><h3>Technical writing</h3><p>Engineering explanations and project articles.</p></a>
+<a class="card" target="_top" href="../cv/"><small>CV</small><h3>Curriculum vitae</h3><p>Open the concise employer-facing summary of education, experience and engineering work.</p></a>
+</div>
+</div>
+</main>
+</div>
+</section>
+<div class="taskbar"><button class="start" data-open="projects">START / PROJECTS</button><div class="clock" id="clock">--:--:--</div></div>
+</div>
+<script src="../data/content.js"></script>
+<script>
+const tabs=[...document.querySelectorAll('[data-tab]')];
+const panels=[...document.querySelectorAll('[data-panel]')];
+const projectDetail=document.querySelector('[data-project-detail]');
+const projectContent=document.querySelector('[data-project-content]');
+const projectPath=document.querySelector('[data-project-path]');
+const main=document.querySelector('.main');
+
+function escapeHtml(value=''){return String(value).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
+
+function openTab(name){
+  projectDetail?.classList.remove('active');
+  tabs.forEach(x=>x.classList.toggle('active',x.dataset.tab===name));
+  panels.forEach(x=>x.classList.toggle('active',x.dataset.panel===name));
+  if(main)main.scrollTop=0;
+}
+
+function projectHref(project){
+  const aliases={'rf-energy-harvesting-bci':'energy-harvesting-epaper'};
+  return '../projects/'+(aliases[project.id]||project.id)+'/';
+}
+
+function renderProject(project){
+  const facts=(project.facts||[]).slice(0,8);
+  const verification=(project.verification||[]).slice(0,6);
+  const sections=(project.caseStudySections||[]).slice(0,5);
+  const links=(project.links||[]).slice(0,5);
+  const skills=(project.skills||[]).slice(0,8);
+  const cover=project.coverImage ? '../'+project.coverImage : '';
+
+  return [
+    '<div class="kicker">'+escapeHtml((project.category||'ENGINEERING PROJECT').toUpperCase())+'</div>',
+    '<h1>'+escapeHtml(project.title||'Project')+'</h1>',
+    '<p class="lead">'+escapeHtml(project.subtitle||project.summary||'')+'</p>',
+    '<div class="project-layout">',
+      cover ? '<div class="project-cover"><img src="'+escapeHtml(cover)+'" alt=""></div>' : '<div class="project-cover"></div>',
+      '<aside class="project-meta"><dl>',
+        '<dt>YEAR</dt><dd>'+escapeHtml(project.year||'—')+'</dd>',
+        '<dt>STATUS</dt><dd>'+escapeHtml(project.status||'—')+'</dd>',
+        '<dt>ROLE</dt><dd>'+escapeHtml(project.contribution||'Independent engineering work')+'</dd>',
+        skills.length?'<dt>TOOLS</dt><dd>'+skills.map(escapeHtml).join(' · ')+'</dd>':'',
+      '</dl></aside>',
+    '</div>',
+    '<section class="project-section"><h2>Engineering summary</h2><p>'+escapeHtml(project.summary||'')+'</p></section>',
+    project.challenge?'<section class="project-section"><h2>Problem / challenge</h2><p>'+escapeHtml(project.challenge)+'</p></section>':'',
+    project.approach?'<section class="project-section"><h2>Approach</h2><p>'+escapeHtml(project.approach)+'</p></section>':'',
+    verification.length?'<section class="project-section"><h2>Verification evidence</h2><div class="project-stats">'+verification.map(v=>'<div class="project-stat"><b>'+escapeHtml(v.result||'')+'</b><span>'+escapeHtml(v.metric||'')+(v.note?' · '+escapeHtml(v.note):'')+'</span></div>').join('')+'</div></section>':'',
+    facts.length?'<section class="project-section"><h2>Project record</h2><div class="rows">'+facts.map(f=>'<div class="row"><b>'+escapeHtml(f.label||'')+'</b><div><strong>'+escapeHtml(f.value||'')+'</strong></div></div>').join('')+'</div></section>':'',
+    sections.map(s=>'<section class="project-section"><h2>'+escapeHtml(s.title||'')+'</h2><p>'+escapeHtml(s.intro||'')+'</p>'+(s.bullets?.length?'<ul>'+s.bullets.map(b=>'<li>'+escapeHtml(b)+'</li>').join('')+'</ul>':'')+'</section>').join(''),
+    project.nextSteps?.length?'<section class="project-section"><h2>Next engineering gate</h2><ul>'+project.nextSteps.map(x=>'<li>'+escapeHtml(x)+'</li>').join('')+'</ul></section>':'',
+    '<section class="project-section"><h2>Evidence & links</h2><div class="project-links">',
+      links.map(l=>'<a href="'+escapeHtml(l.href||'#')+'" target="_blank" rel="noopener">'+escapeHtml(l.label||'Evidence')+' ↗</a>').join(''),
+      '<a href="'+projectHref(project)+'" target="_blank" rel="noopener">Full case study ↗</a>',
+    '</div></section>'
+  ].join('');
+}
+
+function openProject(id){
+  const data=window.PORTFOLIO_DATA||{};
+  const project=(data.projects||[]).find(p=>p.id===id);
+  if(!project||!projectDetail||!projectContent)return;
+  panels.forEach(x=>x.classList.remove('active'));
+  tabs.forEach(x=>x.classList.remove('active'));
+  projectContent.innerHTML=renderProject(project);
+  if(projectPath)projectPath.textContent='C:\\PORTFOLIO\\PROJECTS\\'+String(project.title||id).toUpperCase();
+  projectDetail.classList.add('active');
+  if(main)main.scrollTop=0;
+}
+
+tabs.forEach(x=>x.addEventListener('click',()=>openTab(x.dataset.tab)));
+document.querySelectorAll('[data-project]').forEach(x=>x.addEventListener('click',()=>openProject(x.dataset.project)));
+document.querySelector('[data-project-back]')?.addEventListener('click',()=>openTab('projects'));
+document.querySelectorAll('[data-open]').forEach(x=>x.addEventListener('click',()=>openTab(x.dataset.open)));
+setInterval(()=>document.getElementById('clock').textContent=new Date().toLocaleTimeString('en-GB',{hour12:false}),500);
+
+['mousemove','mousedown','mouseup','keydown','keyup'].forEach(type=>{
+  window.addEventListener(type,event=>{
+    const payload={type};
+    if(type==='mousemove'){payload.clientX=event.clientX;payload.clientY=event.clientY}
+    if(type==='keydown'||type==='keyup')payload.key=event.key;
+    parent.postMessage(payload,'*');
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Portfolio Graphics Diagnostics</title>
+<style>
+html,body{margin:0;background:#080a0d;color:#e8edf2;font:15px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace}
+main{max-width:980px;margin:0 auto;padding:40px 24px 72px}
+h1{font:700 32px/1.1 Arial,sans-serif;margin:0 0 10px}
+p{color:#aeb8c2}.status{padding:16px;border:1px solid #2e3b49;background:#0e141b;margin:20px 0}
+.ok{color:#65e39a}.bad{color:#ff6b6b}.warn{color:#ffd166}
+table{width:100%;border-collapse:collapse;margin-top:20px;background:#0c1117}
+td{border:1px solid #26323d;padding:10px;vertical-align:top}td:first-child{width:240px;color:#8fa0b0}
+code{white-space:pre-wrap;word-break:break-word}
+a{color:#6db7ff}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}.actions a{border:1px solid #344456;padding:9px 12px;text-decoration:none}
+canvas{width:220px;height:140px;border:1px solid #26323d;background:#000;margin-top:18px}
+</style>
+</head>
+<body>
+<main>
+<h1>Graphics diagnostics</h1>
+<p>This page uses no Three.js. It checks whether the browser itself can create the WebGL context required by the immersive portfolio.</p>
+<div id="summary" class="status">Running checks…</div>
+<table id="results"></table>
+<canvas id="test" width="440" height="280"></canvas>
+<div class="actions">
+<a href="./">Return to portfolio</a>
+<a href="projects/aurora-vx/">Open case studies</a>
+</div>
+<script>
+(function(){
+  const rows=[];
+  const add=(k,v)=>rows.push([k,String(v)]);
+  const ua=navigator.userAgent;
+  add('User agent',ua);
+  add('Platform',navigator.platform||'unknown');
+  add('Device pixel ratio',window.devicePixelRatio);
+  add('Logical processors',navigator.hardwareConcurrency||'unknown');
+  add('Secure context',window.isSecureContext);
+  add('Cross-origin isolated',window.crossOriginIsolated);
+
+  const canvas=document.getElementById('test');
+  let gl=null;
+  let mode='none';
+  let err='';
+  try{
+    gl=canvas.getContext('webgl2',{failIfMajorPerformanceCaveat:false});
+    if(gl) mode='WebGL2';
+    if(!gl){gl=canvas.getContext('webgl',{failIfMajorPerformanceCaveat:false});if(gl)mode='WebGL1'}
+    if(!gl){gl=canvas.getContext('experimental-webgl');if(gl)mode='experimental-webgl'}
+  }catch(e){err=e&&e.message?e.message:String(e)}
+  add('WebGL context',mode);
+  if(err)add('Context error',err);
+
+  if(gl){
+    add('Version',gl.getParameter(gl.VERSION));
+    add('GLSL',gl.getParameter(gl.SHADING_LANGUAGE_VERSION));
+    add('Vendor',gl.getParameter(gl.VENDOR));
+    add('Renderer',gl.getParameter(gl.RENDERER));
+    add('Max texture size',gl.getParameter(gl.MAX_TEXTURE_SIZE));
+    add('Max viewport',gl.getParameter(gl.MAX_VIEWPORT_DIMS));
+
+    const dbg=gl.getExtension('WEBGL_debug_renderer_info');
+    if(dbg){
+      add('Unmasked vendor',gl.getParameter(dbg.UNMASKED_VENDOR_WEBGL));
+      add('Unmasked renderer',gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL));
+    }
+
+    gl.clearColor(.05,.17,.28,1);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+  }
+
+  const summary=document.getElementById('summary');
+  if(gl){
+    summary.className='status ok';
+    summary.innerHTML='<b>PASS:</b> Firefox created a '+mode+' context. If the main portfolio is still black, the failure is higher in the Three.js/CSS3D stack rather than basic WebGL.';
+  }else{
+    summary.className='status bad';
+    summary.innerHTML='<b>FAIL:</b> This browser could not create a WebGL context. The immersive 3D room cannot run until Firefox graphics/WebGL is enabled.';
+  }
+
+  const table=document.getElementById('results');
+  rows.forEach(([k,v])=>{
+    const tr=document.createElement('tr');
+    const a=document.createElement('td');a.textContent=k;
+    const b=document.createElement('td');const code=document.createElement('code');code.textContent=v;b.appendChild(code);
+    tr.append(a,b);table.appendChild(tr);
+  });
+})();
+</script>
+</main>
+</body>
+</html>
