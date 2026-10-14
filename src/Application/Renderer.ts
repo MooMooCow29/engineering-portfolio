@@ -51,7 +51,7 @@ export default class Renderer {
         // this.instance.toneMapping = THREE.ACESFilmicToneMapping;
         // this.instance.toneMappingExposure = 0.9;
         this.instance.setSize(this.sizes.width, this.sizes.height);
-        this.instance.setPixelRatio(Math.min(this.sizes.pixelRatio, 1.5));
+        this.instance.setPixelRatio(Math.min(this.sizes.pixelRatio, 2));
         this.instance.setClearColor(0x000000, 0.0);
 
         // Style
@@ -63,7 +63,6 @@ export default class Renderer {
 
         this.overlayInstance = new THREE.WebGLRenderer();
         this.overlayInstance.setSize(this.sizes.width, this.sizes.height);
-        this.overlayInstance.setPixelRatio(Math.min(this.sizes.pixelRatio, 1.25));
         this.overlayInstance.domElement.style.position = 'absolute';
         this.overlayInstance.domElement.style.top = '0px';
         this.overlayInstance.domElement.style.mixBlendMode = 'soft-light';
@@ -105,12 +104,12 @@ export default class Renderer {
 
     resize() {
         this.instance.setSize(this.sizes.width, this.sizes.height);
-        this.instance.setPixelRatio(Math.min(this.sizes.pixelRatio, 1.5));
+        this.instance.setPixelRatio(Math.min(this.sizes.pixelRatio, 2));
 
         this.cssInstance.setSize(this.sizes.width, this.sizes.height);
 
         this.overlayInstance.setSize(this.sizes.width, this.sizes.height);
-        this.overlayInstance.setPixelRatio(Math.min(this.sizes.pixelRatio, 1.25));
+        this.overlayInstance.setPixelRatio(Math.min(this.sizes.pixelRatio, 2));
     }
 
     update() {
