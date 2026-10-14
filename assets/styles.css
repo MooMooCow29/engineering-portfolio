@@ -2325,3 +2325,133 @@ html.light .home-template .panel-visual{
   .home-template .lab-loader-line span,
   .home-template .site-header{transition:none}
 }
+
+
+/* =========================================================
+   WORKBENCH V3 — embedded CSS3D engineering terminal
+   ========================================================= */
+.home-template .lab-css3d-renderer{
+  position:absolute!important;
+  inset:0;
+  z-index:0!important;
+  overflow:hidden;
+  pointer-events:none;
+}
+.home-template .lab-monitor-surface{
+  overflow:hidden;
+  background:#0c1118;
+  border:0;
+  opacity:.98;
+  filter:saturate(.92) contrast(1.03);
+  transition:filter .3s ease,opacity .3s ease;
+}
+.home-template .lab-monitor-surface:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  box-shadow:inset 0 0 70px rgba(0,0,0,.34);
+}
+.home-template .lab-monitor-surface.is-interactive{
+  opacity:1;
+  filter:none;
+}
+.home-template .lab-monitor-iframe{
+  display:block;
+  background:#0c1118;
+}
+.home-template .lab-hotspot-list .lab-monitor-launch{
+  appearance:none;
+  width:100%;
+  border:0;
+  border-bottom:1px solid rgba(255,255,255,.13);
+  background:rgba(255,107,61,.055);
+  color:#f2efe8;
+  display:grid;
+  grid-template-columns:30px 1fr auto;
+  gap:.68rem;
+  align-items:center;
+  padding:.68rem .70rem;
+  text-align:left;
+  cursor:pointer;
+  transition:background .18s ease,padding-left .18s ease;
+}
+.home-template .lab-hotspot-list .lab-monitor-launch:hover,
+.home-template .lab-hotspot-list .lab-monitor-launch:focus-visible{
+  background:rgba(255,107,61,.16);
+  padding-left:1rem;
+  outline:none;
+}
+.home-template .lab-hotspot-list .lab-monitor-launch>span{
+  color:var(--ak-accent);
+  font:600 .58rem/1 var(--mono);
+}
+.home-template .lab-hotspot-list .lab-monitor-launch small,
+.home-template .lab-hotspot-list .lab-monitor-launch strong{
+  display:block;
+}
+.home-template .lab-hotspot-list .lab-monitor-launch small{
+  color:rgba(242,239,232,.5);
+  font:600 .54rem/1.2 var(--mono);
+  letter-spacing:.08em;
+}
+.home-template .lab-hotspot-list .lab-monitor-launch strong{
+  margin-top:.18rem;
+  font-size:.72rem;
+}
+.home-template .lab-hotspot-list .lab-monitor-launch b{
+  color:var(--ak-accent);
+  font:600 .46rem/1 var(--mono);
+  letter-spacing:.08em;
+}
+.home-template .lab-monitor-back{
+  position:absolute;
+  top:2.15rem;
+  left:50%;
+  z-index:220;
+  transform:translateX(-50%);
+  min-height:36px;
+  padding:.62rem .82rem;
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(7,9,13,.76);
+  color:rgba(242,239,232,.76);
+  backdrop-filter:blur(12px);
+  cursor:pointer;
+  font-size:.50rem;
+  letter-spacing:.08em;
+  pointer-events:auto;
+  transition:background .18s ease,color .18s ease,border-color .18s ease;
+}
+.home-template .lab-monitor-back:hover,
+.home-template .lab-monitor-back:focus-visible{
+  color:#fff;
+  border-color:rgba(255,107,61,.62);
+  background:rgba(20,16,16,.90);
+}
+.home-template .lab-monitor-back[hidden]{display:none}
+.home-template .lab-intro.is-monitor-mode .lab-brand,
+.home-template .lab-intro.is-monitor-mode .lab-skip,
+.home-template .lab-intro.is-monitor-mode .lab-status,
+.home-template .lab-intro.is-monitor-mode .lab-explore-ui{
+  opacity:.06;
+  pointer-events:none;
+}
+.home-template .lab-intro.is-monitor-mode .lab-vignette{
+  opacity:.38;
+}
+.home-template .lab-intro.is-monitor-mode .lab-scanlines{
+  opacity:.035;
+}
+.home-template .lab-intro.is-monitor-mode .lab-canvas{
+  cursor:default;
+}
+@media(max-width:720px){
+  .home-template .lab-hotspot-list .lab-monitor-launch{
+    min-height:62px;
+  }
+  .home-template .lab-hotspot-list .lab-monitor-launch b{display:none}
+  .home-template .lab-monitor-back{
+    top:1.25rem;
+    white-space:nowrap;
+  }
+}
