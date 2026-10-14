@@ -81,3 +81,5 @@ jobs:
             /tmp/portfolio-after-start.png
             /tmp/portfolio-interaction.log
             /tmp/portfolio-interaction-server.log
+            static/models/Computer/baked_computer.jpg
+            static/models/Computer/computer_setup.glb
