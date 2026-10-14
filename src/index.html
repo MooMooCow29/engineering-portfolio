@@ -10,7 +10,23 @@
       margin: 0;
     }
 
+    #css {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
     #webgl {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    #overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
       pointer-events: none;
     }
 
@@ -26,6 +42,7 @@
 
     #ui {
       position: absolute;
+      z-index: 100;
       overflow: hidden;
       top: 0;
       left: 0;
@@ -53,6 +70,7 @@
 
     #ui-interactive {
       position: absolute;
+      z-index: 110;
       top: 0;
       left: 0;
       width: 256px;
@@ -89,8 +107,34 @@
   <div id="preboot" style="position:fixed;inset:0;z-index:99999;background:#000;color:#fff;font:16px monospace;padding:48px;box-sizing:border-box;">
     <p style="margin:0 0 10px;color:#00ff00;"><b>Singh, Karanveer Engineering.</b></p>
     <p style="margin:0 0 8px;">KSBIOS (C)2026 Karanveer Singh</p>
-    <p style="margin:0;">INITIALISING ENGINEERING PORTFOLIO...</p>
+    <p style="margin:0 0 8px;">INITIALISING ENGINEERING PORTFOLIO...</p>
+    <p id="boot-watchdog" style="margin:0;color:#888;">Waiting for application bundle</p>
   </div>
+  <script>
+    window.__portfolioBootStarted = Date.now();
+    window.addEventListener('error', function (event) {
+      var el = document.getElementById('boot-watchdog');
+      if (el) {
+        el.style.color = '#ff6b6b';
+        el.textContent = 'Startup error: ' + (event.message || 'unknown error');
+      }
+    });
+    window.addEventListener('unhandledrejection', function (event) {
+      var el = document.getElementById('boot-watchdog');
+      if (el) {
+        el.style.color = '#ff6b6b';
+        var reason = event.reason && event.reason.message ? event.reason.message : event.reason;
+        el.textContent = 'Startup error: ' + (reason || 'unhandled promise rejection');
+      }
+    });
+    window.setTimeout(function () {
+      var el = document.getElementById('boot-watchdog');
+      if (el && !window.__portfolioReactMounted) {
+        el.style.color = '#ffd166';
+        el.textContent = 'Application is taking longer than expected to mount.';
+      }
+    }, 4000);
+  </script>
   <div id="css"></div>
   <div id="webgl"></div>
   <div id="overlay"></div>
