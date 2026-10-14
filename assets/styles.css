@@ -1523,3 +1523,332 @@ html.light .home-template .panel-visual{
   .home-template .engineering-field{opacity:.38}
   .home-template .field-control{transition:none}
 }
+
+
+/* =========================================================
+   IMMERSIVE ENGINEERING WORKBENCH
+   A purpose-built 3D landing scene inspired by immersive
+   portfolio environments, adapted for engineering evidence.
+   ========================================================= */
+.home-template .lab-intro{
+  position:relative;
+  min-height:100svh;
+  overflow:hidden;
+  background:#090b0f;
+  color:#f2efe8;
+  isolation:isolate;
+}
+.home-template .lab-canvas,
+.home-template .lab-fallback{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+}
+.home-template .lab-canvas{
+  display:block;
+  z-index:0;
+  cursor:grab;
+}
+.home-template .lab-canvas.is-hot{cursor:pointer}
+.home-template .lab-canvas:active{cursor:grabbing}
+.home-template .lab-fallback{
+  z-index:-1;
+  background:
+    radial-gradient(circle at 20% 30%,rgba(255,107,61,.18),transparent 34%),
+    radial-gradient(circle at 80% 24%,rgba(116,137,255,.16),transparent 32%),
+    linear-gradient(150deg,#0b0c10 0%,#11151c 56%,#08090c 100%);
+}
+.home-template .lab-overlay{
+  position:relative;
+  z-index:2;
+  min-height:100svh;
+  pointer-events:none;
+}
+.home-template .lab-status{
+  position:absolute;
+  top:7rem;
+  left:0;
+  display:flex;
+  align-items:center;
+  gap:.7rem;
+  padding:.55rem .7rem;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(8,10,14,.42);
+  backdrop-filter:blur(9px);
+}
+.home-template .lab-status .mono{color:rgba(242,239,232,.64)}
+.home-template .lab-status-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:#6cf0a1;
+  box-shadow:0 0 0 5px rgba(108,240,161,.08);
+}
+.home-template .lab-entry{
+  position:absolute;
+  left:0;
+  bottom:8vh;
+  width:min(680px,62vw);
+  padding:1.5rem 1.65rem 1.7rem;
+  border-left:2px solid var(--ak-accent);
+  background:linear-gradient(90deg,rgba(8,10,14,.86),rgba(8,10,14,.48) 72%,transparent);
+  opacity:0;
+  transform:translateY(18px);
+  transition:opacity .7s ease,transform .7s cubic-bezier(.16,1,.3,1);
+  pointer-events:auto;
+}
+.home-template .lab-entry.is-ready{opacity:1;transform:none}
+.home-template .lab-entry.is-exiting{opacity:0;transform:translateY(16px)}
+.home-template .lab-index{color:var(--ak-accent)}
+.home-template .lab-entry h1{
+  margin:.75rem 0 1rem;
+  font-size:clamp(3.8rem,8vw,8rem);
+  line-height:.82;
+  letter-spacing:-.07em;
+}
+.home-template .lab-entry h1 em{
+  color:var(--ak-accent);
+  font-style:normal;
+}
+.home-template .lab-entry p{
+  max-width:610px;
+  margin:0;
+  color:rgba(242,239,232,.72);
+  line-height:1.7;
+}
+.home-template .lab-entry-actions{
+  display:flex;
+  gap:.65rem;
+  flex-wrap:wrap;
+  margin-top:1.35rem;
+}
+.home-template .lab-entry .ak-btn-ghost{
+  border-color:rgba(255,255,255,.24);
+  color:#f2efe8;
+  background:rgba(8,10,14,.2);
+}
+.home-template .lab-entry .ak-btn-solid{
+  background:#f2efe8;
+  color:#0b0c10;
+  border-color:#f2efe8;
+}
+.home-template .lab-explore-ui{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+}
+.home-template .lab-explore-ui[hidden]{display:none}
+.home-template .lab-explore-ui.is-visible{animation:labUiIn .55s cubic-bezier(.16,1,.3,1) both}
+@keyframes labUiIn{from{opacity:0}to{opacity:1}}
+.home-template .lab-instruction{
+  position:absolute;
+  left:0;
+  top:7rem;
+  display:flex;
+  flex-direction:column;
+  gap:.28rem;
+}
+.home-template .lab-instruction strong{
+  font-size:.8rem;
+  letter-spacing:.09em;
+}
+.home-template .lab-hotspot-list{
+  position:absolute;
+  right:0;
+  top:50%;
+  transform:translateY(-50%);
+  width:min(390px,31vw);
+  display:grid;
+  border-top:1px solid rgba(255,255,255,.17);
+  background:rgba(8,10,14,.28);
+  backdrop-filter:blur(9px);
+  pointer-events:auto;
+}
+.home-template .lab-hotspot-list a{
+  display:grid;
+  grid-template-columns:34px 1fr;
+  gap:.7rem;
+  align-items:center;
+  padding:.72rem .85rem;
+  border-bottom:1px solid rgba(255,255,255,.13);
+  color:#f2efe8;
+  transition:background .18s ease,padding-left .18s ease;
+}
+.home-template .lab-hotspot-list a:hover,
+.home-template .lab-hotspot-list a:focus-visible{
+  background:rgba(255,107,61,.12);
+  padding-left:1rem;
+}
+.home-template .lab-hotspot-list>a>span{
+  color:var(--ak-accent);
+  font:600 .58rem/1 var(--mono);
+}
+.home-template .lab-hotspot-list small,
+.home-template .lab-hotspot-list strong{display:block}
+.home-template .lab-hotspot-list small{
+  color:rgba(242,239,232,.5);
+  font:600 .54rem/1.2 var(--mono);
+  letter-spacing:.08em;
+}
+.home-template .lab-hotspot-list strong{
+  margin-top:.18rem;
+  font-size:.72rem;
+}
+.home-template .lab-continue{
+  position:absolute;
+  left:0;
+  bottom:2.8rem;
+  display:flex;
+  align-items:center;
+  gap:.85rem;
+  padding-bottom:.35rem;
+  border-bottom:1px solid rgba(255,255,255,.28);
+  color:#f2efe8;
+  font-size:.78rem;
+  pointer-events:auto;
+}
+.home-template .lab-continue b{
+  color:var(--ak-accent);
+  font-size:1rem;
+}
+.home-template .lab-hover-label{
+  position:fixed;
+  left:var(--label-x,50vw);
+  top:var(--label-y,50vh);
+  z-index:20;
+  min-width:190px;
+  padding:.65rem .75rem;
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(8,10,14,.86);
+  backdrop-filter:blur(9px);
+  pointer-events:none;
+}
+.home-template .lab-hover-label[hidden]{display:none}
+.home-template .lab-hover-label span,
+.home-template .lab-hover-label strong,
+.home-template .lab-hover-label small{display:block}
+.home-template .lab-hover-label span{
+  color:var(--ak-accent);
+  font:600 .52rem/1.2 var(--mono);
+  letter-spacing:.08em;
+}
+.home-template .lab-hover-label strong{
+  margin-top:.2rem;
+  font-size:.75rem;
+}
+.home-template .lab-hover-label small{
+  margin-top:.4rem;
+  color:rgba(242,239,232,.48);
+  font:500 .49rem/1 var(--mono);
+}
+.home-template .lab-loader{
+  position:absolute;
+  right:0;
+  bottom:2.8rem;
+  display:flex;
+  align-items:center;
+  gap:.7rem;
+  padding:.55rem .7rem;
+  background:rgba(8,10,14,.5);
+  border:1px solid rgba(255,255,255,.14);
+  pointer-events:none;
+  transition:opacity .3s ease;
+}
+.home-template .lab-loader[hidden]{display:none}
+.home-template .lab-loader.is-complete{opacity:0}
+.home-template .lab-loader>span:first-child{
+  width:8px;height:8px;border-radius:50%;
+  border:1px solid var(--ak-accent);
+  border-top-color:transparent;
+  animation:labSpin .8s linear infinite;
+}
+@keyframes labSpin{to{transform:rotate(1turn)}}
+.home-template .lab-no-webgl .lab-entry{
+  opacity:1;
+  transform:none;
+}
+.home-template .lab-no-webgl .lab-explore-ui{
+  display:block!important;
+}
+.home-template .lab-no-webgl .lab-canvas{
+  display:none;
+}
+
+/* Explicitly lock the hero name into exactly two lines. */
+.home-template .hero-name{
+  font-size:clamp(4.4rem,10.9vw,10.9rem);
+}
+.home-template .hero-name>span{
+  display:block;
+  white-space:nowrap;
+  overflow:visible;
+}
+.home-template .hero-name>span:first-child{
+  font-size:.92em;
+}
+
+/* Header becomes intentionally quiet over the 3D scene. */
+.home-template:has(.lab-intro:first-child) .site-header{
+  background:rgba(9,11,15,.70);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.home-template:has(.lab-intro:first-child) .site-header .ak-logo-mark{
+  border-color:rgba(255,255,255,.14);
+}
+.home-template:has(.lab-intro:first-child) .site-header .ak-logo-copy strong,
+.home-template:has(.lab-intro:first-child) .site-header .ak-nav-links a,
+.home-template:has(.lab-intro:first-child) .site-header .ak-theme{
+  color:#f2efe8;
+}
+.home-template:has(.lab-intro:first-child) .site-header .ak-logo-copy small{
+  color:rgba(242,239,232,.52);
+}
+.home-template:has(.lab-intro:first-child) .site-header .ak-theme{
+  border-color:rgba(255,255,255,.14);
+}
+
+@media(max-width:1000px){
+  .home-template .lab-entry{width:min(700px,78vw)}
+  .home-template .lab-hotspot-list{width:min(360px,39vw)}
+}
+@media(max-width:720px){
+  .home-template .lab-intro{min-height:100svh}
+  .home-template .lab-status{top:6.8rem}
+  .home-template .lab-entry{
+    left:0;right:0;bottom:2rem;
+    width:auto;
+    padding:1rem 0 1.1rem;
+    border-left:0;
+    border-top:1px solid rgba(255,255,255,.16);
+    background:linear-gradient(0deg,rgba(8,10,14,.94),rgba(8,10,14,.58),transparent);
+  }
+  .home-template .lab-entry h1{
+    font-size:clamp(3.2rem,17vw,5.4rem);
+  }
+  .home-template .lab-entry p{
+    font-size:.8rem;
+  }
+  .home-template .lab-instruction{
+    top:7rem;
+  }
+  .home-template .lab-hotspot-list{
+    right:0;left:0;top:auto;bottom:5.3rem;
+    width:auto;
+    transform:none;
+    grid-template-columns:repeat(2,1fr);
+  }
+  .home-template .lab-hotspot-list a{
+    min-height:68px;
+  }
+  .home-template .lab-continue{
+    bottom:2rem;
+  }
+  .home-template .lab-hover-label{display:none!important}
+  .home-template .hero-name{
+    font-size:clamp(3.8rem,18vw,6.2rem);
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .home-template .lab-loader>span:first-child{animation:none}
+  .home-template .lab-entry,
+  .home-template .lab-explore-ui{transition:none;animation:none}
+}
