@@ -52,6 +52,7 @@ export default class MonitorScreen extends EventEmitter {
         // Create screen
         this.initializeScreenEvents();
         this.createIframe();
+        this.createMonitorBrandPlate();
         const maxOffset = this.createTextureLayers();
         this.createEnclosingPlanes(maxOffset);
         this.createPerspectiveDimmer(maxOffset);
@@ -252,6 +253,77 @@ export default class MonitorScreen extends EventEmitter {
 
         // Add to gl scene
         this.scene.add(mesh);
+    }
+
+    /**
+     * Covers the original creator badge baked into the CRT bezel with a
+     * portfolio-specific OEM-style plate. The original text is part of the
+     * baked computer texture rather than HTML, so changing page copy alone
+     * cannot remove it.
+     */
+    createMonitorBrandPlate() {
+        const canvas = document.createElement('canvas');
+        canvas.width = 1024;
+        canvas.height = 256;
+
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
+        // Match the warm grey CRT plastic closely enough that the plate reads
+        // like a physical manufacturer badge rather than a floating UI label.
+        ctx.fillStyle = '#b7b6af';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.strokeStyle = '#878781';
+        ctx.lineWidth = 10;
+        ctx.strokeRect(5, 5, canvas.width - 10, canvas.height - 10);
+
+        // Small engineering mark.
+        ctx.fillStyle = '#3b3b39';
+        ctx.beginPath();
+        ctx.arc(92, 128, 52, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#b7b6af';
+        ctx.font = '700 46px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('KS', 92, 130);
+
+        ctx.textAlign = 'left';
+        ctx.fillStyle = '#343431';
+        ctx.font = '700 64px Arial';
+        ctx.fillText('KARANVEER', 175, 116);
+
+        ctx.font = '700 30px Arial';
+        ctx.letterSpacing = '8px';
+        ctx.fillStyle = '#565650';
+        ctx.fillText('ENGINEERING', 178, 174);
+
+        const texture = new THREE.CanvasTexture(canvas);
+        texture.encoding = THREE.sRGBEncoding;
+        texture.needsUpdate = true;
+
+        const material = new THREE.MeshBasicMaterial({
+            map: texture,
+            side: THREE.DoubleSide,
+        });
+
+        const geometry = new THREE.PlaneGeometry(320, 80);
+        const plate = new THREE.Mesh(geometry, material);
+
+        // The original "Heffernan" badge sits on the lower-left monitor bezel.
+        // These coordinates place the replacement directly over that baked
+        // label while preserving the original computer model and animations.
+        plate.position.copy(
+            this.offsetPosition(
+                this.position,
+                new THREE.Vector3(-475, -610, 88)
+            )
+        );
+        plate.rotation.copy(this.rotation);
+
+        this.scene.add(plate);
     }
 
     /**
