@@ -31,10 +31,7 @@ export default class Resources extends EventEmitter {
         this.sources = sources;
 
         this.items = { texture: {}, cubeTexture: {}, gltfModel: {}, audio: {} };
-        // Only visual resources gate the first interactive frame.
-        // Audio continues loading in the background so a slow decoder/network
-        // cannot leave the visitor staring at the boot screen.
-        this.toLoad = this.sources.filter((source) => source.type !== 'audio').length;
+        this.toLoad = this.sources.length;
         this.loaded = 0;
         this.application = new Application();
         this.loading = this.application.loading;
@@ -55,42 +52,23 @@ export default class Resources extends EventEmitter {
     startLoading() {
         // Load each source
         for (const source of this.sources) {
-            const fail = (error: unknown) => {
-                console.warn('Failed to load portfolio resource:', source.path, error);
-                this.sourceFailed(source);
-            };
-
             if (source.type === 'gltfModel') {
-                this.loaders.gltfLoader.load(
-                    source.path,
-                    (file) => this.sourceLoaded(source, file),
-                    undefined,
-                    fail
-                );
+                this.loaders.gltfLoader.load(source.path, (file) => {
+                    this.sourceLoaded(source, file);
+                });
             } else if (source.type === 'texture') {
-                this.loaders.textureLoader.load(
-                    source.path,
-                    (file) => {
-                        file.encoding = THREE.sRGBEncoding;
-                        this.sourceLoaded(source, file);
-                    },
-                    undefined,
-                    fail
-                );
+                this.loaders.textureLoader.load(source.path, (file) => {
+                    file.encoding = THREE.sRGBEncoding;
+                    this.sourceLoaded(source, file);
+                });
             } else if (source.type === 'cubeTexture') {
-                this.loaders.cubeTextureLoader.load(
-                    source.path,
-                    (file) => this.sourceLoaded(source, file),
-                    undefined,
-                    fail
-                );
+                this.loaders.cubeTextureLoader.load(source.path, (file) => {
+                    this.sourceLoaded(source, file);
+                });
             } else if (source.type === 'audio') {
-                this.loaders.audioLoader.load(
-                    source.path,
-                    (buffer) => this.sourceLoaded(source, buffer),
-                    undefined,
-                    fail
-                );
+                this.loaders.audioLoader.load(source.path, (buffer) => {
+                    this.sourceLoaded(source, buffer);
+                });
             }
         }
     }
@@ -98,32 +76,15 @@ export default class Resources extends EventEmitter {
     sourceLoaded(source: Resource, file: LoadedResource) {
         this.items[source.type][source.name] = file;
 
-        // Audio is optional for first paint and is deliberately allowed to
-        // finish after the room is already usable.
-        if (source.type === 'audio') return;
-
-        this.markRequiredSourceComplete(source.name);
-    }
-
-    sourceFailed(source: Resource) {
-        // A missing audio file should never block the experience.
-        if (source.type === 'audio') return;
-
-        // Likewise, a failed visual resource advances the loader so the user
-        // gets the best available scene instead of an infinite black screen.
-        this.markRequiredSourceComplete(source.name);
-    }
-
-    markRequiredSourceComplete(sourceName: string) {
-        this.loaded = Math.min(this.loaded + 1, this.toLoad);
+        this.loaded++;
 
         this.loading.trigger('loadedSource', [
-            sourceName,
+            source.name,
             this.loaded,
             this.toLoad,
         ]);
 
-        if (this.loaded >= this.toLoad) {
+        if (this.loaded === this.toLoad) {
             this.trigger('ready');
         }
     }
