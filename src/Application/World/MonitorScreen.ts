@@ -296,7 +296,6 @@ export default class MonitorScreen extends EventEmitter {
         ctx.fillText('KARANVEER', 175, 116);
 
         ctx.font = '700 30px Arial';
-        ctx.letterSpacing = '8px';
         ctx.fillStyle = '#565650';
         ctx.fillText('ENGINEERING', 178, 174);
 
