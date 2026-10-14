@@ -25,6 +25,7 @@
 
     #ui {
       position: absolute;
+      z-index: 20;
       overflow: hidden;
       top: 0;
       left: 0;
@@ -52,6 +53,7 @@
 
     #ui-interactive {
       position: absolute;
+      z-index: 30;
       top: 0;
       left: 0;
       width: 256px;
@@ -85,6 +87,22 @@
 </head>
 
 <body>
+  <div id="preboot" style="position:fixed;inset:0;z-index:9999;background:#000;color:#fff;font:16px monospace;padding:48px;box-sizing:border-box;">
+    <div style="color:#00ff00;margin-bottom:18px;"><b>Singh, Karanveer Engineering.</b></div>
+    <div>KSBIOS (C)2026 Karanveer Singh</div>
+    <div style="margin-top:14px;">INITIALISING INTERACTIVE ENGINEERING PORTFOLIO...</div>
+    <div id="preboot-status" style="margin-top:8px;color:#aaa;">Starting application</div>
+  </div>
+  <script>
+    window.addEventListener('error', function (event) {
+      var el = document.getElementById('preboot-status');
+      if (el) el.textContent = 'Startup error: ' + (event.message || 'unknown error');
+    });
+    window.addEventListener('unhandledrejection', function (event) {
+      var el = document.getElementById('preboot-status');
+      if (el) el.textContent = 'Startup error: ' + (event.reason && event.reason.message ? event.reason.message : event.reason || 'unknown error');
+    });
+  </script>
   <div id="css"></div>
   <div id="webgl"></div>
   <div id="overlay"></div>
