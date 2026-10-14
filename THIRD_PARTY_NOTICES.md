@@ -31,3 +31,10 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+
+## Design inspiration: Henry Heffernan
+
+The immersive engineering workbench is conceptually inspired by Henry Heffernan's 3D interactive portfolio (https://henryheffernan.com/ and https://github.com/henryjeff/portfolio-website).
+
+No Henry Heffernan personal content, 3D models, scene assets or project data are reused. The engineering workbench in this repository is an original Three.js scene built from procedural primitives and adapted around Karanveer Singh's own engineering projects.
