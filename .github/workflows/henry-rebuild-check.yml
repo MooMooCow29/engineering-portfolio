@@ -46,6 +46,16 @@ jobs:
           sed -E 's/<[^>]+>/ /g' /tmp/portfolio-dom.html | tr -s ' ' | head -c 3000
           test -s /tmp/portfolio.png
 
+      - name: Post-start Chrome interaction test
+        run: |
+          python3 -m http.server 4175 --directory public >/tmp/portfolio-interaction-server.log 2>&1 &
+          SERVER_PID=$!
+          sleep 2
+          npm install --no-save playwright@1.48.2
+          npx playwright install chromium
+          node scripts/interaction-smoke.mjs
+          kill $SERVER_PID || true
+
       - name: Firefox smoke test
         continue-on-error: true
         run: |
@@ -67,3 +77,7 @@ jobs:
             /tmp/portfolio-server.log
             /tmp/portfolio-firefox.png
             /tmp/portfolio-firefox-server.log
+            /tmp/portfolio-before-start.png
+            /tmp/portfolio-after-start.png
+            /tmp/portfolio-interaction.log
+            /tmp/portfolio-interaction-server.log
