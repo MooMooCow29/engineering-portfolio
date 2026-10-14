@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -25,7 +26,6 @@
 
     #ui {
       position: absolute;
-      z-index: 20;
       overflow: hidden;
       top: 0;
       left: 0;
@@ -39,7 +39,7 @@
 
     #monitor-videos {
       pointer-events: none;
-      position: absolute;
+      position: 'absolute';
       opacity: 0;
       width: 0;
       height: 0;
@@ -53,7 +53,6 @@
 
     #ui-interactive {
       position: absolute;
-      z-index: 30;
       top: 0;
       left: 0;
       width: 256px;
@@ -66,51 +65,38 @@
     }
   </style>
 
-  <title>Karanveer Singh - Electrical &amp; Electronic Engineering</title>
+  <title>Karanveer Singh - Engineering Portfolio</title>
   <meta name="title" content="Karanveer Singh - Electrical & Electronic Engineering">
-  <meta name="description" content="Interactive engineering portfolio for Karanveer Singh: embedded systems, electronics, control, verification, robotics, energy and research projects.">
+  <meta name="description" content="Interactive engineering portfolio for Karanveer Singh, covering embedded systems, electronics, control, robotics, energy and verification.">
   <link rel="canonical" href="https://moomoocow29.github.io/engineering-portfolio/">
 
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://moomoocow29.github.io/engineering-portfolio/">
   <meta property="og:title" content="Karanveer Singh - Electrical & Electronic Engineering">
-  <meta property="og:description" content="Interactive engineering portfolio covering embedded systems, electronics, control, verification, robotics and research.">
+  <meta property="og:description" content="Interactive engineering portfolio covering embedded systems, electronics, control, robotics, energy and verification.">
   <meta property="og:image" content="https://moomoocow29.github.io/engineering-portfolio/assets/social-preview.jpg">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://moomoocow29.github.io/engineering-portfolio/">
   <meta name="twitter:title" content="Karanveer Singh - Electrical & Electronic Engineering">
-  <meta name="twitter:description" content="Interactive engineering portfolio covering embedded systems, electronics, control, verification, robotics and research.">
+  <meta name="twitter:description" content="Interactive engineering portfolio covering embedded systems, electronics, control, robotics, energy and verification.">
   <meta name="twitter:image" content="https://moomoocow29.github.io/engineering-portfolio/assets/social-preview.jpg">
 
-  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="shortcut icon" href="../assets/favicon.svg" type="image/svg+xml">
 </head>
 
 <body>
-  <div id="preboot" style="position:fixed;inset:0;z-index:9999;background:#000;color:#fff;font:16px monospace;padding:48px;box-sizing:border-box;">
-    <div style="color:#00ff00;margin-bottom:18px;"><b>Singh, Karanveer Engineering.</b></div>
-    <div>KSBIOS (C)2026 Karanveer Singh</div>
-    <div style="margin-top:14px;">INITIALISING INTERACTIVE ENGINEERING PORTFOLIO...</div>
-    <div id="preboot-status" style="margin-top:8px;color:#aaa;">Starting application</div>
-  </div>
-  <script>
-    window.addEventListener('error', function (event) {
-      var el = document.getElementById('preboot-status');
-      if (el) el.textContent = 'Startup error: ' + (event.message || 'unknown error');
-    });
-    window.addEventListener('unhandledrejection', function (event) {
-      var el = document.getElementById('preboot-status');
-      if (el) el.textContent = 'Startup error: ' + (event.reason && event.reason.message ? event.reason.message : event.reason || 'unknown error');
-    });
-  </script>
   <div id="css"></div>
   <div id="webgl"></div>
   <div id="overlay"></div>
   <div id="ui-interactive"></div>
   <div id="ui"></div>
   <div id="monitor-videos">
-    <video id="video-1" muted loop autoplay playsinline width="0" height="0" src="../static/textures/monitor/video/base-static.mp4" style="opacity:0;"></video>
-    <video id="video-2" muted loop autoplay playsinline width="0" height="0" src="../static/textures/monitor/video/static-texture-layer.mp4" style="opacity:0;"></video>
+    <video id="video-1" muted loop autoplay width="0" height="0" src="../static/textures/monitor/video/base-static.mp4"
+      style="opacity: 0;"></video>
+    <video id="video-2" muted loop autoplay width="0" height="0"
+      src="../static/textures/monitor/video/static-texture-layer.mp4" style="opacity: 0;"></video>
   </div>
 </body>
+
 </html>
