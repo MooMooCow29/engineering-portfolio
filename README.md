@@ -1,70 +1,69 @@
-# Karanveer Singh | Engineering Portfolio
+# Karanveer Singh — Immersive Engineering Portfolio
 
-Static GitHub Pages portfolio for electrical/electronic engineering, embedded systems, control, verification and research-led projects.
+This branch is a clean rebuild based directly on Henry Heffernan's MIT-licensed portfolio source:
 
-Public site: https://moomoocow29.github.io/engineering-portfolio/
+- Original repository: https://github.com/henryjeff/portfolio-website
+- Original author: Henry Heffernan
+- Original licence: MIT, reproduced at `THIRD_PARTY_LICENSES/HENRY_HEFFERNAN_MIT.md`
 
-## Current profile
+The previous experimental homepage code is **not** the basis of this branch. The immersive shell, loading sequence, camera architecture, baked 3D room, CSS3D monitor system, shaders and interaction model come from Henry's source. Changes are limited to what is required to turn it into Karanveer Singh's engineering portfolio and to preserve the existing engineering case studies.
 
-The portfolio is maintained as an evidence-led engineering record rather than a project-count gallery. Current headline evidence includes:
+## What is changed
 
-- Third-year MEng Electrical & Electronic Engineering, University of East Anglia.
-- 70.5% Year 2 average (First-class level).
-- MBDA Electronics Engineering internship completed in 2026; graduate offer received following the placement.
-- Electrical Systems Lead, Formula Student UEA, 2025-2026.
-- Vice-President, UEA Innovators.
-- IAEA Global Virtual Student Challenge finalist.
-- PCBWay-sponsored controller PCB: five bare boards manufactured, 32 selected unpowered incoming checks complete; assembly and powered testing next.
-- MEng dissertation: one 4.2-inch wirelessly powered ePaper conference badge; 2.9-inch programmed module baseline demonstrated, raw-panel and batteryless development next.
-- Merged upstream contribution to `upb-lea/pySignalScope`.
-- EEG seizure-detection uncertainty-evaluation research prototype with automated tests and Monte Carlo evidence.
+- Henry Heffernan identity → Karanveer Singh.
+- Software-engineering copy → Electrical & Electronic Engineering.
+- HeffernanOS iframe → local `KaranOS` engineering workstation.
+- Monitor projects → Karanveer's engineering projects, experience and writing.
+- Metadata, social links and favicon → Karanveer's portfolio.
+- Existing detailed case-study pages are copied into the production build so monitor links remain useful.
+- Henry's runtime scene assets are downloaded from the original MIT-licensed repository by `scripts/fetch-henry-assets.mjs`.
 
-## Content model
+## What is deliberately kept
 
-The detailed project archive lives in `data/content.js`. Current factual/status corrections that must override older project snapshots live in `data/updates.js`. Recent externally validated work, newer research case studies, featured-project ordering and curated writing links live in `data/recent-projects.js`.
+The goal of this branch is *not* to redesign Henry's experience. The following are intentionally kept close to the original source:
 
-Each project can contain:
+- loading / BIOS sequence;
+- baked room and computer models;
+- camera keyframes and cinematic transitions;
+- free-camera behaviour;
+- CSS3D monitor architecture;
+- monitor surface texture treatment;
+- coffee-steam and screen shaders;
+- UI motion and interaction rhythm;
+- keyboard/mouse/ambient audio behaviour.
 
-- `facts` — concise engineering metadata shown at the top of the case study.
-- `caseStudySections` — project-specific technical sections with optional bullet evidence and claim-boundary notes.
-- `verification` — measured/test evidence displayed in a structured table.
-- `gallery` — only project-specific images; unrelated imagery should not be used as filler.
-- `links` — repositories, documentation, pull requests, technical articles or institutional evidence.
+## Local preview
 
-Projects without relevant imagery deliberately use a technical placeholder until real evidence is available.
-
-## Claim discipline
-
-A project should distinguish clearly between:
-
-- implemented / measured evidence;
-- calculated or cited assumptions;
-- design/manufacturing release;
-- planned physical validation;
-- future research direction.
-
-Do not convert a planned test into a completed claim merely to make the portfolio look stronger.
-
-## Build
-
-After changing any content layer:
+Use Node.js 20+.
 
 ```bash
-node build.mjs
+npm install
+npm run dev
 ```
 
-The build loads the layers in this order:
+The first run downloads the original scene assets that are required at runtime.
 
-1. `data/content.js`
-2. `data/updates.js`
-3. `data/recent-projects.js`
+For a production build:
 
-It then regenerates permanent project pages, metadata, sitemap and robots files. Runtime pages load the same layers in the same order so displayed project status remains consistent with future rebuilds.
+```bash
+npm run build
+```
 
-## GitHub Pages
+Webpack writes the site to `public/`.
 
-Publish the repository from the `main` branch and `/(root)` in GitHub Pages settings.
+## Engineering content
 
-## Latest project update
+The existing evidence-led project archive remains in:
 
-The homepage leads with the PCBWay-sponsored board and a responsive collage of original article images. The collage preserves the manufactured board, routing candidates, robot-platform comparison, teardown and unpowered probing as separate images with descriptive captions. The published case study is linked from the homepage, project record and writing section. The dissertation follows the October 2026 single-badge plan.
+- `projects/`
+- `data/`
+- `assets/`
+- `cv/`
+
+Webpack copies those directories into `public/` after building the immersive shell.
+
+## Branch
+
+Development branch: `henry-base-rebuild`.
+
+Do not merge this branch to `main` until the immersive rebuild has been visually reviewed.
