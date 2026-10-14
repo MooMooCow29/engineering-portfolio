@@ -57,16 +57,13 @@ export default class Application {
         this.scene = new THREE.Scene();
         this.cssScene = new THREE.Scene();
         this.overlayScene = new THREE.Scene();
-
-        // Mount the loading UI before starting any network/asset work so the
-        // first paint is immediate even on slower machines.
-        this.ui = new UI();
-
         this.resources = new Resources(sources);
         this.camera = new Camera();
         this.renderer = new Renderer();
         this.camera.createControls();
         this.world = new World();
+
+        this.ui = new UI();
 
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.has('debug')) {
