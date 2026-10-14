@@ -33,6 +33,62 @@ function renderHeader() {
   ].join('');
 }
 
+
+function renderLabIntro() {
+  const hotspots = [
+    ['scope', 'OSCILLOSCOPE', 'pySignalScope', 'projects/pysignalscope/'],
+    ['pcb', 'CONTROLLER PCB', 'Advanced 2WD Robot Controller', 'projects/advanced-2wd-robot-controller/'],
+    ['robot', 'ROBOT PLATFORM', 'Obstacle Avoidance Robot', 'projects/obstacle-avoidance-robot/'],
+    ['epaper', 'E-PAPER', 'Batteryless ePaper Research', 'projects/energy-harvesting-epaper/'],
+    ['aurora', 'AVIONICS CONSOLE', 'AURORA-VX', 'projects/aurora-vx/'],
+    ['formula', 'VEHICLE ELECTRONICS', 'Formula Student Electrical Systems', 'projects/formula-student-electrical/']
+  ];
+  return [
+    '<section id="lab" class="lab-intro" aria-label="Interactive engineering workbench">',
+      '<canvas class="lab-canvas" id="lab-canvas" aria-hidden="true"></canvas>',
+      '<div class="lab-fallback" aria-hidden="true"></div>',
+      '<div class="lab-overlay shell">',
+        '<div class="lab-status">',
+          '<span class="lab-status-dot"></span>',
+          '<span class="mono">INTERACTIVE ENGINEERING WORKBENCH / 2026</span>',
+        '</div>',
+        '<div class="lab-entry" data-lab-entry>',
+          '<span class="lab-index mono">KS // ELECTRICAL &amp; ELECTRONIC ENGINEERING</span>',
+          '<h1>ENTER THE<br><em>WORKBENCH.</em></h1>',
+          '<p>Explore a digital engineering desk built around the projects in this portfolio. Each object opens real project evidence, not a fictional demo.</p>',
+          '<div class="lab-entry-actions">',
+            '<button class="ak-btn ak-btn-solid magnetic" type="button" data-lab-enter><span>Explore the lab ↘</span></button>',
+            '<a class="ak-btn ak-btn-ghost magnetic" href="#hero"><span>Skip to portfolio</span></a>',
+          '</div>',
+        '</div>',
+        '<div class="lab-explore-ui" data-lab-explore hidden>',
+          '<div class="lab-instruction">',
+            '<span class="mono">MOVE CURSOR TO LOOK · SELECT AN OBJECT</span>',
+            '<strong>ENGINEERING WORKBENCH</strong>',
+          '</div>',
+          '<div class="lab-hotspot-list" aria-label="Workbench project shortcuts">',
+            hotspots.map((item, index) => [
+              '<a href="' + item[3] + '" data-lab-hotspot="' + item[0] + '">',
+                '<span>' + String(index + 1).padStart(2, '0') + '</span>',
+                '<div><small>' + item[1] + '</small><strong>' + item[2] + '</strong></div>',
+              '</a>'
+            ].join('')).join(''),
+          '</div>',
+          '<a class="lab-continue" href="#hero"><span>Continue to full portfolio</span><b>↓</b></a>',
+        '</div>',
+        '<div class="lab-hover-label" data-lab-label hidden>',
+          '<span data-lab-label-type></span>',
+          '<strong data-lab-label-title></strong>',
+          '<small>CLICK TO OPEN ↗</small>',
+        '</div>',
+        '<div class="lab-loader" data-lab-loader>',
+          '<span></span><span class="mono">INITIALISING WORKBENCH</span>',
+        '</div>',
+      '</div>',
+    '</section>'
+  ].join('');
+}
+
 function renderFieldControls() {
   const items = [
     ['sense', 'SENSE', 'Sensors, acquisition, estimation and measurement evidence.'],
@@ -274,7 +330,7 @@ function renderCursor() {
 
 function render() {
   renderHeader();
-  $('#app').innerHTML = [renderHero(), renderAbout(), renderSkills(), renderWork(), renderWriting(), renderContact()].join('');
+  $('#app').innerHTML = [renderLabIntro(), renderHero(), renderAbout(), renderSkills(), renderWork(), renderWriting(), renderContact()].join('');
   renderFooter();
   renderCursor();
 }
