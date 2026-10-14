@@ -47,3 +47,7 @@ async function fetchAsset(path) {
 for (const path of assets) await fetchAsset(path);
 
 console.log('Henry Heffernan MIT-licensed scene assets are ready.');
+
+
+const { brandComputerTexture } = await import('./brand-computer-texture.mjs');
+await brandComputerTexture();
