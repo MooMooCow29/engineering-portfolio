@@ -36,7 +36,7 @@
   const THREE_URL = 'three';
   const CSS3D_URL = 'three/addons/renderers/CSS3DRenderer.js';
   const LAB_SCRIPT_URL = document.currentScript?.src || new URL('assets/lab.js', window.location.href).href;
-  const MONITOR_SURFACE_URL = new URL('experience/monitor-surface.js', LAB_SCRIPT_URL).href;
+  const MONITOR_SURFACE_URL = new URL('experience/monitor-surface.js?v=20261014-monitor-os2', LAB_SCRIPT_URL).href;
   const GSAP_URL = 'https://cdn.jsdelivr.net/npm/gsap@3.12.5/+esm';
 
   let THREE;
