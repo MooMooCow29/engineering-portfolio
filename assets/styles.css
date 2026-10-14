@@ -2338,6 +2338,7 @@ html.light .home-template .panel-visual{
   pointer-events:none;
 }
 .home-template .lab-monitor-surface{
+  position:relative;
   overflow:hidden;
   background:#0c1118;
   border:0;
