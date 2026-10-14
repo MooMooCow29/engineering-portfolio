@@ -4,9 +4,5 @@ export default class UI {
     constructor() {
         createUI();
         createVolumeUI();
-
-        requestAnimationFrame(() => {
-            document.getElementById('preboot')?.remove();
-        });
     }
 }
