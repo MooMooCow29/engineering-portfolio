@@ -54,7 +54,8 @@
     "@types/react-dom": "^17.0.14",
     "@types/stats.js": "^0.17.0",
     "@types/three": "^0.138.0",
-    "@types/node": "16.11.68"
+    "@types/node": "16.11.68",
+    "sharp": "^0.33.5"
   },
   "name": "karanveer-singh-engineering-portfolio",
   "version": "1.0.0",
