@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KaranOS — Engineering Workbench</title>
+<style>
+:root{--bg:#0c1118;--panel:#121923;--panel2:#17212e;--line:#283647;--text:#e9edf2;--muted:#8d9aaa;--accent:#ff6b3d;--green:#6ce59a;--blue:#7aa2ff}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,a{font:inherit}.desktop{position:relative;width:100%;height:100%;background:
+radial-gradient(circle at 75% 18%,rgba(122,162,255,.10),transparent 32%),
+radial-gradient(circle at 18% 78%,rgba(255,107,61,.10),transparent 28%),
+linear-gradient(135deg,#0b1017,#0d141d 55%,#0a0e14)}
+.grid{position:absolute;inset:0;opacity:.24;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:28px 28px}
+.topbar{position:absolute;left:0;right:0;top:0;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid var(--line);background:rgba(10,15,22,.88);backdrop-filter:blur(10px);z-index:5}
+.brand{display:flex;align-items:center;gap:10px}.mark{width:28px;height:28px;border:1px solid #3a4b5f;display:grid;place-items:center;font:700 10px ui-monospace,monospace}.brand strong{font-size:12px;letter-spacing:.08em}.brand small{display:block;color:var(--muted);font:9px ui-monospace,monospace;margin-top:2px}
+.status{display:flex;gap:12px;align-items:center;color:var(--muted);font:9px ui-monospace,monospace}.dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 12px rgba(108,229,154,.8)}
+.icons{position:absolute;left:20px;top:82px;display:grid;gap:14px;z-index:2}.icon{width:92px;border:0;background:transparent;color:var(--text);display:grid;justify-items:center;gap:7px;cursor:pointer}.icon-tile{width:54px;height:54px;border:1px solid var(--line);background:linear-gradient(145deg,#182331,#111923);display:grid;place-items:center;box-shadow:0 12px 28px rgba(0,0,0,.22);transition:.18s}.icon:hover .icon-tile{border-color:var(--accent);transform:translateY(-2px)}.icon span:last-child{font:9px ui-monospace,monospace;text-align:center;color:#c8d0da}
+.window{position:absolute;left:130px;right:26px;top:74px;bottom:58px;border:1px solid #314154;background:rgba(16,23,33,.94);box-shadow:0 26px 80px rgba(0,0,0,.42);z-index:3;display:flex;flex-direction:column}
+.titlebar{height:40px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;background:#151e29;border-bottom:1px solid var(--line)}.traffic{display:flex;gap:6px}.traffic i{display:block;width:9px;height:9px;border-radius:50%}.traffic i:nth-child(1){background:#ff6b5f}.traffic i:nth-child(2){background:#f4c14d}.traffic i:nth-child(3){background:#65d98b}.title{font:9px ui-monospace,monospace;color:var(--muted);letter-spacing:.06em}
+.content{flex:1;min-height:0;display:grid;grid-template-columns:230px 1fr}.sidebar{border-right:1px solid var(--line);padding:14px 10px;background:#101720}.nav{display:grid;gap:5px}.nav button{border:0;background:transparent;color:var(--muted);text-align:left;padding:9px 10px;cursor:pointer;font-size:11px;border-left:2px solid transparent}.nav button:hover,.nav button.active{background:#16202c;color:var(--text);border-left-color:var(--accent)}
+.meta-card{margin-top:18px;padding:11px;border:1px solid var(--line);background:#0e151e}.meta-card b{display:block;font:9px ui-monospace,monospace;color:var(--accent);margin-bottom:6px}.meta-card p{margin:0;color:var(--muted);font-size:10px;line-height:1.5}
+.main{overflow:auto;padding:22px 24px 30px}.eyebrow{font:9px ui-monospace,monospace;color:var(--accent);letter-spacing:.11em}.main h1{margin:8px 0 10px;font-size:38px;line-height:.95;letter-spacing:-.045em}.lead{max-width:760px;margin:0;color:#aab4c0;font-size:13px;line-height:1.7}
+.project-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:20px}.card{border:1px solid var(--line);background:linear-gradient(145deg,#141e29,#101720);padding:14px;text-decoration:none;color:inherit;transition:.18s}.card:hover{border-color:#4a6078;transform:translateY(-2px)}.card .num{font:8px ui-monospace,monospace;color:var(--accent)}.card h3{margin:8px 0 7px;font-size:16px}.card p{margin:0;color:var(--muted);font-size:10px;line-height:1.55}.tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px}.tags span{border:1px solid #2c3a4a;padding:4px 6px;color:#95a2b2;font:8px ui-monospace,monospace}
+.panel{display:none}.panel.active{display:block}.timeline{display:grid;gap:10px;margin-top:20px}.row{display:grid;grid-template-columns:120px 1fr;gap:18px;padding:12px 0;border-top:1px solid var(--line)}.row b{font:9px ui-monospace,monospace;color:var(--accent)}.row strong{display:block;font-size:13px}.row p{margin:4px 0 0;color:var(--muted);font-size:10px;line-height:1.55}
+.writing{display:grid;gap:8px;margin-top:18px}.writing a{display:grid;grid-template-columns:1fr auto;gap:20px;padding:12px 0;border-top:1px solid var(--line);text-decoration:none;color:inherit}.writing a span{font-size:12px}.writing a em{font:8px ui-monospace,monospace;color:var(--muted);font-style:normal}
+.footer{position:absolute;left:0;right:0;bottom:0;height:34px;display:flex;justify-content:space-between;align-items:center;padding:0 12px;background:#111923;border-top:1px solid var(--line);color:var(--muted);font:8px ui-monospace,monospace;z-index:5}.exit{border:0;background:transparent;color:var(--muted);cursor:pointer;font:8px ui-monospace,monospace}.exit:hover{color:var(--text)}
+@media(max-width:780px){.icons{display:none}.window{left:12px;right:12px}.content{grid-template-columns:150px 1fr}.project-grid{grid-template-columns:1fr}.main h1{font-size:28px}}
+</style>
+</head>
+<body>
+<div class="desktop">
+  <div class="grid"></div>
+  <header class="topbar">
+    <div class="brand"><div class="mark">KS</div><div><strong>KARAN OS</strong><small>engineering terminal</small></div></div>
+    <div class="status"><span class="dot"></span><span>SYSTEMS ONLINE</span><span id="clock">--:--:--</span></div>
+  </header>
+
+  <div class="icons">
+    <button class="icon" data-open="projects"><span class="icon-tile">⌁</span><span>PROJECTS</span></button>
+    <button class="icon" data-open="about"><span class="icon-tile">KS</span><span>ABOUT</span></button>
+    <button class="icon" data-open="writing"><span class="icon-tile">✎</span><span>WRITING</span></button>
+  </div>
+
+  <main class="window">
+    <div class="titlebar">
+      <div class="traffic"><i></i><i></i><i></i></div>
+      <div class="title">/PORTFOLIO/ENGINEERING_WORKBENCH</div>
+      <div></div>
+    </div>
+    <div class="content">
+      <aside class="sidebar">
+        <nav class="nav">
+          <button class="active" data-tab="projects">01 / PROJECTS</button>
+          <button data-tab="about">02 / ABOUT</button>
+          <button data-tab="experience">03 / EXPERIENCE</button>
+          <button data-tab="writing">04 / WRITING</button>
+          <button data-tab="links">05 / LINKS</button>
+        </nav>
+        <div class="meta-card"><b>ENGINEERING PHILOSOPHY</b><p>Requirements → prototypes → measurements → verification → iteration.</p></div>
+      </aside>
+
+      <section class="main">
+        <div class="panel active" data-panel="projects">
+          <div class="eyebrow">SELECTED ENGINEERING WORK</div>
+          <h1>Systems you can inspect.</h1>
+          <p class="lead">Each project opens a full case study with the problem, architecture, design decisions, testing evidence, limitations and next engineering gate.</p>
+          <div class="project-grid">
+            <a class="card" target="_top" href="../projects/aurora-vx/"><span class="num">01 / CONTROL + ASSURANCE</span><h3>AURORA-VX</h3><p>eVTOL digital twin, embedded avionics path and traceable verification pipeline.</p><div class="tags"><span>SIMULINK</span><span>EMBEDDED C</span><span>PIL/HIL</span></div></a>
+            <a class="card" target="_top" href="../projects/advanced-2wd-robot-controller/"><span class="num">02 / PCB + ROBOTICS</span><h3>Advanced 2WD Robot Controller</h3><p>Custom controller PCB evolved from a deliberately documented failure and redesign process.</p><div class="tags"><span>KICAD</span><span>POWER</span><span>EMBEDDED</span></div></a>
+            <a class="card" target="_top" href="../projects/pysignalscope/"><span class="num">03 / OPEN SOURCE</span><h3>pySignalScope</h3><p>Waveform numerics, timebase validation and measurement tooling contribution.</p><div class="tags"><span>PYTHON</span><span>TEST</span><span>SIGNALS</span></div></a>
+            <a class="card" target="_top" href="../projects/energy-harvesting-epaper/"><span class="num">04 / ENERGY SYSTEMS</span><h3>Batteryless ePaper</h3><p>Harvested-energy operation of bistable displays with measured update-energy constraints.</p><div class="tags"><span>POWER</span><span>EPAPER</span><span>RESEARCH</span></div></a>
+          </div>
+        </div>
+
+        <div class="panel" data-panel="about">
+          <div class="eyebrow">ABOUT</div>
+          <h1>Karanveer Singh.</h1>
+          <p class="lead">MEng Electrical & Electronic Engineering student at the University of East Anglia. I work across embedded systems, control, electronics, sensing and verification, with a bias toward projects that can be measured and defended rather than simply demonstrated.</p>
+          <div class="timeline">
+            <div class="row"><b>FOCUS</b><div><strong>Hardware-software systems</strong><p>Embedded electronics, power, sensing, control, data and verification.</p></div></div>
+            <div class="row"><b>METHOD</b><div><strong>Evidence-led iteration</strong><p>Prototype early, instrument the system, document failures and turn them into the next design gate.</p></div></div>
+            <div class="row"><b>INTEREST</b><div><strong>Engineering with consequence</strong><p>Energy, robotics, control, safety-critical thinking and eventually building companies around useful technical systems.</p></div></div>
+          </div>
+        </div>
+
+        <div class="panel" data-panel="experience">
+          <div class="eyebrow">EXPERIENCE</div>
+          <h1>Engineering in practice.</h1>
+          <div class="timeline">
+            <div class="row"><b>2026</b><div><strong>MBDA — Electronics Engineering Placement</strong><p>Circuit work, PCB/manufacturing workflows, test, inspection and technical reporting.</p></div></div>
+            <div class="row"><b>2025–26</b><div><strong>Formula Student UEA — Electrical Systems Lead</strong><p>LV architecture, CAN, debugging, signal integrity, shutdown and system interfaces.</p></div></div>
+            <div class="row"><b>2026–27</b><div><strong>UEA Innovators — Vice-President</strong><p>Technical projects, workshops, hackathon activity and engineering community leadership.</p></div></div>
+          </div>
+        </div>
+
+        <div class="panel" data-panel="writing">
+          <div class="eyebrow">TECHNICAL WRITING</div>
+          <h1>Explain the engineering.</h1>
+          <div class="writing">
+            <a target="_top" href="https://medium.com/@ks683557"><span>I Designed a Custom Robot Controller PCB from Scratch</span><em>PCB / ROBOTICS ↗</em></a>
+            <a target="_top" href="https://medium.com/@ks683557"><span>PID Control from First Principles</span><em>CONTROL ↗</em></a>
+            <a target="_top" href="https://medium.com/@ks683557"><span>Why Stealth Is an Electrical Engineering Problem</span><em>RF / SYSTEMS ↗</em></a>
+            <a target="_top" href="https://medium.com/@ks683557"><span>What an FEA Solver Is Actually Doing</span><em>SIMULATION ↗</em></a>
+          </div>
+        </div>
+
+        <div class="panel" data-panel="links">
+          <div class="eyebrow">LINKS</div>
+          <h1>Continue outside the lab.</h1>
+          <div class="project-grid">
+            <a class="card" target="_top" href="https://github.com/MooMooCow29"><span class="num">GITHUB</span><h3>Source & evidence</h3><p>Repositories, code, engineering documentation and public project history.</p></a>
+            <a class="card" target="_top" href="https://www.linkedin.com/in/karan-singh-6901a7246/"><span class="num">LINKEDIN</span><h3>Professional profile</h3><p>Experience, education, leadership and contact route.</p></a>
+            <a class="card" target="_top" href="https://medium.com/@ks683557"><span class="num">MEDIUM</span><h3>Technical writing</h3><p>Long-form engineering explanations and project write-ups.</p></a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer"><span>KARAN OS / LOCAL ENGINEERING INDEX</span><button class="exit" id="exit">RETURN TO 3D WORKBENCH [ESC]</button></footer>
+</div>
+<script>
+const buttons=[...document.querySelectorAll('[data-tab]')];
+const panels=[...document.querySelectorAll('[data-panel]')];
+function openTab(name){
+  buttons.forEach(b=>b.classList.toggle('active',b.dataset.tab===name));
+  panels.forEach(p=>p.classList.toggle('active',p.dataset.panel===name));
+}
+buttons.forEach(b=>b.addEventListener('click',()=>openTab(b.dataset.tab)));
+document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>openTab(b.dataset.open)));
+document.getElementById('exit').addEventListener('click',()=>parent.postMessage({type:'karan-os-exit'},'*'));
+window.addEventListener('keydown',e=>{if(e.key==='Escape')parent.postMessage({type:'karan-os-exit'},'*')});
+setInterval(()=>{document.getElementById('clock').textContent=new Date().toLocaleTimeString('en-GB',{hour12:false})},500);
+</script>
+</body>
+</html>
