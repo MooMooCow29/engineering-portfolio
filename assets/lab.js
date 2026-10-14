@@ -581,6 +581,48 @@
     scene.add(animated.dust);
   }
 
+  function addEvidenceWall() {
+    const loader = new THREE.TextureLoader();
+    const frameMat = material('#171b22',.42,.56);
+    const cards = [
+      { id:'pcb', x:-3.55, y:2.13, src:'assets/images/pcbway-manufactured-board.webp', label:'PCB / MANUFACTURED BOARD' },
+      { id:'robot', x:-3.55, y:1.05, src:'assets/images/robot-window-front-clean.webp', label:'ROBOT / PHYSICAL PLATFORM' },
+      { id:'aurora', x:3.22, y:2.13, src:'assets/images/aurora-console-live.webp', label:'AURORA-VX / DIGITAL TWIN' },
+      { id:'scope', x:3.22, y:1.05, src:'assets/images/pysignalscope-impedance-overview.webp', label:'PYSIGNALSCOPE / MEASUREMENT' }
+    ];
+
+    cards.forEach(card=>{
+      const backing = new THREE.Mesh(new THREE.BoxGeometry(1.50,.92,.055),frameMat);
+      backing.position.set(card.x,card.y,-3.18);
+      backing.castShadow=true;
+      scene.add(backing);
+
+      const photoMat = new THREE.MeshBasicMaterial({color:'#30343b'});
+      const photo = new THREE.Mesh(new THREE.PlaneGeometry(1.38,.72),photoMat);
+      photo.position.set(card.x,card.y+.035,-3.145);
+      scene.add(photo);
+      register(photo,card.id);
+
+      loader.load(card.src,texture=>{
+        texture.colorSpace=THREE.SRGBColorSpace;
+        texture.minFilter=THREE.LinearFilter;
+        texture.magFilter=THREE.LinearFilter;
+        photoMat.map=texture;
+        photoMat.color.set('#ffffff');
+        photoMat.needsUpdate=true;
+      });
+
+      const tag = canvasTexture([card.label],{
+        width:780,height:130,bg:'#0e1218',fg:'#e8e8e5',accent:'#ff6b3d',
+        kicker:'ENGINEERING EVIDENCE',footer:''
+      });
+      const tagMat = new THREE.MeshBasicMaterial({map:tag.texture,transparent:false});
+      const labelPlane = new THREE.Mesh(new THREE.PlaneGeometry(1.38,.18),tagMat);
+      labelPlane.position.set(card.x,card.y-.405,-3.14);
+      scene.add(labelPlane);
+    });
+  }
+
   function buildScene() {
     scene=new THREE.Scene();
     scene.background=new THREE.Color('#090b0f');
@@ -622,6 +664,7 @@
     addNotebook();
     addCables();
     addMultimeter();
+    addEvidenceWall();
 
     resize();
   }
