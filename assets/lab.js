@@ -672,12 +672,14 @@
     if ('IntersectionObserver' in window) {
       const observer = new IntersectionObserver(entries => {
         visible = entries.some(entry => entry.isIntersecting);
+        document.body.classList.toggle('lab-visible', visible);
       }, {threshold:.01});
       observer.observe(section);
     }
   }
 
   async function init() {
+    document.body.classList.add('lab-visible');
     try {
       three = await import(THREE_URL);
       buildScene();
