@@ -1787,22 +1787,22 @@ html.light .home-template .panel-visual{
 }
 
 /* Header becomes intentionally quiet over the 3D scene. */
-.home-template:has(.lab-intro:first-child) .site-header{
+.home-template.lab-visible .site-header{
   background:rgba(9,11,15,.70);
   border-bottom:1px solid rgba(255,255,255,.08);
 }
-.home-template:has(.lab-intro:first-child) .site-header .ak-logo-mark{
+.home-template.lab-visible .site-header .ak-logo-mark{
   border-color:rgba(255,255,255,.14);
 }
-.home-template:has(.lab-intro:first-child) .site-header .ak-logo-copy strong,
-.home-template:has(.lab-intro:first-child) .site-header .ak-nav-links a,
-.home-template:has(.lab-intro:first-child) .site-header .ak-theme{
+.home-template.lab-visible .site-header .ak-logo-copy strong,
+.home-template.lab-visible .site-header .ak-nav-links a,
+.home-template.lab-visible .site-header .ak-theme{
   color:#f2efe8;
 }
-.home-template:has(.lab-intro:first-child) .site-header .ak-logo-copy small{
+.home-template.lab-visible .site-header .ak-logo-copy small{
   color:rgba(242,239,232,.52);
 }
-.home-template:has(.lab-intro:first-child) .site-header .ak-theme{
+.home-template.lab-visible .site-header .ak-theme{
   border-color:rgba(255,255,255,.14);
 }
 
@@ -1852,3 +1852,5 @@ html.light .home-template .panel-visual{
   .home-template .lab-entry,
   .home-template .lab-explore-ui{transition:none;animation:none}
 }
+
+.home-template.lab-visible .engineering-field{opacity:0!important}
