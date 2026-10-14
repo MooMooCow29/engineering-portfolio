@@ -28,17 +28,25 @@
   const fpsReadout = section.querySelector('[data-lab-fps]');
   const modeReadout = section.querySelector('[data-lab-mode]');
   const listLinks = [...section.querySelectorAll('[data-lab-hotspot]')];
+  const monitorLauncher = section.querySelector('[data-lab-monitor]');
+  const monitorBack = section.querySelector('[data-lab-monitor-back]');
 
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const coarse = window.matchMedia('(pointer:coarse)').matches;
-  const THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.168.0/build/three.module.js';
+  const THREE_URL = 'three';
+  const CSS3D_URL = 'three/addons/renderers/CSS3DRenderer.js';
+  const MONITOR_SURFACE_URL = './assets/experience/monitor-surface.js';
   const GSAP_URL = 'https://cdn.jsdelivr.net/npm/gsap@3.12.5/+esm';
 
   let THREE;
+  let CSS3DRenderer;
+  let CSS3DObject;
+  let createMonitorSurface;
   let gsap;
   let renderer;
   let scene;
   let camera;
+  let monitorSurface = null;
   let raycaster;
   let pointerNdc;
   let clock;
@@ -46,6 +54,7 @@
   let visible = true;
   let exploring = false;
   let focusedId = '';
+  let monitorActive = false;
   let hovered = null;
   let dragging = false;
   let dragStart = null;
@@ -87,6 +96,11 @@
   const overview = {
     position: [0, 2.75, 6.35],
     target: [0, .48, -.08]
+  };
+
+  const monitorView = {
+    position: [-.35, 1.50, 2.95],
+    target: [-.35, 1.50, .575]
   };
 
   const projectMap = {
@@ -267,22 +281,32 @@
     const frame = new THREE.Mesh(new THREE.BoxGeometry(3.35,2.08,.18),frameMat);
     frame.castShadow=true; group.add(frame);
 
-    const c = document.createElement('canvas');
-    c.width=1200;c.height=720;
-    animated.monitorCanvas=c;
-    animated.monitorCtx=c.getContext('2d');
-    animated.monitorTexture=new THREE.CanvasTexture(c);
-    animated.monitorTexture.colorSpace=THREE.SRGBColorSpace;
-    drawMainMonitor();
-
     const screenMat = new THREE.MeshStandardMaterial({
-      map:animated.monitorTexture,
-      emissive:'#18243a',
-      emissiveIntensity:.42,
-      roughness:.28
+      color:'#080c12',
+      emissive:'#102138',
+      emissiveIntensity:.34,
+      roughness:.24
     });
     const screen = new THREE.Mesh(new THREE.PlaneGeometry(3.06,1.79),screenMat);
-    screen.position.z=.101; group.add(screen);
+    screen.position.z=.101;
+    screen.userData.monitorOS = true;
+    group.add(screen);
+    hotspots.push(screen);
+
+    if (createMonitorSurface && CSS3DRenderer && CSS3DObject) {
+      monitorSurface = createMonitorSurface({
+        THREE,
+        CSS3DRenderer,
+        CSS3DObject,
+        section,
+        iframeSrc:'./lab-os/index.html',
+        worldPosition:[-.35,1.50,.575],
+        worldWidth:3.02,
+        pixelWidth:1280,
+        pixelHeight:748
+      });
+      monitorSurface.setInteractive(false);
+    }
 
     const neck = new THREE.Mesh(new THREE.BoxGeometry(.18,.80,.16),frameMat);
     neck.position.y=-1.39; group.add(neck);
@@ -606,6 +630,7 @@
     const rect=canvas.getBoundingClientRect();
     const w=Math.max(1,rect.width),h=Math.max(1,rect.height);
     renderer.setSize(w,h,false);
+    if (monitorSurface) monitorSurface.resize(w,h);
     camera.aspect=w/h;camera.updateProjectionMatrix();
   }
 
@@ -691,6 +716,7 @@
       updateAmbient(t,dt);
       updateOverviewCamera(dt);
       renderer.render(scene,camera);
+      if (monitorSurface) monitorSurface.render(camera);
       frameCounter++;
       if(t-fpsLast>700){
         if(fpsReadout)fpsReadout.textContent=String(Math.round(frameCounter*1000/(t-fpsLast)));
@@ -727,7 +753,7 @@
     for(const hit of intersections){
       let obj=hit.object;
       while(obj){
-        if(obj.userData&&obj.userData.hotspot)return obj;
+        if(obj.userData && (obj.userData.hotspot || obj.userData.monitorOS)) return obj;
         obj=obj.parent;
       }
     }
@@ -744,16 +770,31 @@
   }
 
   function setHovered(next,event) {
-    const nextId=next?.userData?.hotspot||'';
-    const prevId=hovered?.userData?.hotspot||'';
-    if(prevId&&prevId!==nextId&&!focusedId)setGlow(prevId,false);
+    const nextId = next?.userData?.monitorOS ? '__monitor__' : (next?.userData?.hotspot || '');
+    const prevId = hovered?.userData?.monitorOS ? '__monitor__' : (hovered?.userData?.hotspot || '');
+    if(prevId && prevId !== nextId && prevId !== '__monitor__' && !focusedId) setGlow(prevId,false);
     hovered=next||null;
 
-    if(!nextId||focusedId){
+    if(!nextId || focusedId || monitorActive){
       if(label)label.hidden=true;
       canvas.classList.remove('is-hot');
       return;
     }
+
+    if (nextId === '__monitor__') {
+      if(label){
+        label.hidden=false;
+        labelType.textContent='MAIN MONITOR';
+        labelTitle.textContent='KaranOS Engineering Terminal';
+        if(event){
+          label.style.setProperty('--label-x',Math.min(window.innerWidth-270,event.clientX+18)+'px');
+          label.style.setProperty('--label-y',Math.min(window.innerHeight-110,event.clientY+18)+'px');
+        }
+      }
+      canvas.classList.add('is-hot');
+      return;
+    }
+
     setGlow(nextId,true);
     const cfg=projectMap[nextId];
     if(label&&cfg){
@@ -795,7 +836,7 @@
 
   function focusProject(id) {
     const cfg=projectMap[id];
-    if(!cfg||!exploring)return;
+    if(!cfg||!exploring||monitorActive)return;
     if(focusedId===id)return;
     if(focusedId)setGlow(focusedId,false);
     focusedId=id;
@@ -849,12 +890,76 @@
     }
   }
 
+  function enterMonitorMode() {
+    if(!exploring || focusedId || monitorActive || !monitorSurface) return;
+    monitorActive = true;
+    setHovered(null);
+    section.classList.add('is-monitor-mode');
+    if(exploreUi) exploreUi.classList.add('is-dimmed');
+    if(monitorBack) monitorBack.hidden = false;
+    if(camReadout) camReadout.textContent='MONITOR';
+    if(modeReadout) modeReadout.textContent='TERMINAL';
+
+    const activate = () => monitorSurface?.setInteractive(true);
+
+    if(gsap && !reduced){
+      const state={tx:overview.target[0],ty:overview.target[1],tz:overview.target[2]};
+      gsap.to(state,{
+        tx:monitorView.target[0],ty:monitorView.target[1],tz:monitorView.target[2],
+        duration:1.25,ease:'power3.inOut'
+      });
+      gsap.to(camera.position,{
+        x:monitorView.position[0],y:monitorView.position[1],z:monitorView.position[2],
+        duration:1.25,ease:'power3.inOut',
+        onUpdate:()=>camera.lookAt(state.tx,state.ty,state.tz),
+        onComplete:activate
+      });
+    } else {
+      camera.position.fromArray(monitorView.position);
+      camera.lookAt(new THREE.Vector3(...monitorView.target));
+      activate();
+    }
+  }
+
+  function leaveMonitorMode() {
+    if(!monitorActive)return;
+    monitorSurface?.setInteractive(false);
+    monitorActive=false;
+    section.classList.remove('is-monitor-mode');
+    if(exploreUi) exploreUi.classList.remove('is-dimmed');
+    if(monitorBack) monitorBack.hidden=true;
+    if(camReadout) camReadout.textContent='OVERVIEW';
+    if(modeReadout) modeReadout.textContent='EXPLORE';
+
+    if(gsap&&!reduced){
+      const state={tx:monitorView.target[0],ty:monitorView.target[1],tz:monitorView.target[2]};
+      gsap.to(state,{
+        tx:overview.target[0],ty:overview.target[1],tz:overview.target[2],
+        duration:1.15,ease:'power3.inOut'
+      });
+      gsap.to(camera.position,{
+        x:overview.position[0],y:overview.position[1],z:overview.position[2],
+        duration:1.15,ease:'power3.inOut',
+        onUpdate:()=>camera.lookAt(state.tx,state.ty,state.tz)
+      });
+    } else {
+      camera.position.fromArray(overview.position);
+      camera.lookAt(new THREE.Vector3(...overview.target));
+    }
+  }
+
   function bindInteractions() {
     enterButton?.addEventListener('click',enterLab);
+    monitorLauncher?.addEventListener('click',enterMonitorMode);
+    monitorBack?.addEventListener('click',leaveMonitorMode);
     closeButtons.forEach(btn=>btn.addEventListener('click',returnOverview));
 
+    window.addEventListener('message',event=>{
+      if(event?.data?.type==='karan-os-exit') leaveMonitorMode();
+    });
+
     section.addEventListener('pointerdown',event=>{
-      if(!exploring||focusedId||event.button!==0)return;
+      if(!exploring||focusedId||monitorActive||event.button!==0)return;
       dragging=true;
       dragStart={x:event.clientX,y:event.clientY,yaw:view.targetYaw,pitch:view.targetPitch};
       section.classList.add('is-dragging');
@@ -877,13 +982,13 @@
         view.targetPitch=clamp(dragStart.pitch+dy*.48,-.13,.18);
       }
 
-      if(!exploring||coarse||focusedId||!raycaster)return;
+      if(!exploring||coarse||focusedId||monitorActive||!raycaster)return;
       const hit=findHotspot(raycast(event));
       setHovered(hit,event);
     });
 
     section.addEventListener('wheel',event=>{
-      if(!exploring||focusedId)return;
+      if(!exploring||focusedId||monitorActive)return;
       view.targetZoom=clamp(view.targetZoom+Math.sign(event.deltaY)*.34,-1.1,1.75);
     },{passive:true});
 
@@ -893,8 +998,12 @@
     });
 
     canvas.addEventListener('click',event=>{
-      if(!exploring||focusedId||dragging||!raycaster)return;
+      if(!exploring||focusedId||monitorActive||dragging||!raycaster)return;
       const hit=findHotspot(raycast(event));
+      if(hit?.userData?.monitorOS){
+        enterMonitorMode();
+        return;
+      }
       const id=hit?.userData?.hotspot;
       if(id)focusProject(id);
     });
@@ -914,8 +1023,16 @@
 
     window.addEventListener('keydown',event=>{
       if(!visible)return;
-      if(event.key==='Escape'){returnOverview();return;}
+      if(event.key==='Escape'){
+        if(monitorActive) leaveMonitorMode();
+        else returnOverview();
+        return;
+      }
       if(!exploring&&event.key==='Enter'){enterLab();return;}
+      if(exploring&&!focusedId&&!monitorActive&&(event.key==='0'||event.key.toLowerCase()==='m')){
+        enterMonitorMode();
+        return;
+      }
       if(exploring&&/^[1-6]$/.test(event.key)){
         const id=Object.keys(projectMap)[Number(event.key)-1];
         focusProject(id);
@@ -940,9 +1057,17 @@
     document.body.classList.add('lab-visible');
     updateProgress(8,'LOADING 3D ENGINE');
     try{
-      const modules=await Promise.all([import(THREE_URL),import(GSAP_URL)]);
+      const modules=await Promise.all([
+        import(THREE_URL),
+        import(GSAP_URL),
+        import(CSS3D_URL),
+        import(MONITOR_SURFACE_URL)
+      ]);
       THREE=modules[0];
       gsap=modules[1].gsap||modules[1].default||modules[1];
+      CSS3DRenderer=modules[2].CSS3DRenderer;
+      CSS3DObject=modules[2].CSS3DObject;
+      createMonitorSurface=modules[3].createMonitorSurface;
       updateProgress(34,'BUILDING ENGINEERING SCENE');
       buildScene();
       updateProgress(68,'CALIBRATING INTERACTIONS');
