@@ -23,8 +23,8 @@ const assets = [
   'static/audio/keyboard/key_6.mp3',
   'static/audio/startup/startup.mp3',
   'static/audio/atmosphere/office.mp3',
-  'static/audio/cc/type.mp3',
-  'static/images/favicon.ico'
+  'static/audio/cc/type.mp3'
+
 ];
 
 async function exists(path) {
