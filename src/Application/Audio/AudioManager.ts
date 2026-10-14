@@ -66,8 +66,13 @@ export default class Audio {
         // Get the audio source
         sourceName = this.getRandomVariant(sourceName);
 
+        // Audio loads after the visual scene. If the requested clip is not
+        // ready yet, skip it rather than breaking interaction.
+        if (!sourceName) return '';
+
         // Setup
         const buffer = this.loadedAudio[sourceName];
+        if (!buffer) return '';
         const poolKey = sourceName + '_' + Object.keys(this.audioPool).length;
 
         let audio: THREE.Audio<any> | THREE.PositionalAudio = new THREE.Audio(
