@@ -117,17 +117,24 @@ const LoadingScreen: React.FC<LoadingProps> = () => {
     };
 
     const detectWebGLContext = () => {
-        var canvas = document.createElement('canvas');
+        try {
+            const canvas = document.createElement('canvas');
 
-        // Get WebGLRenderingContext from canvas element.
-        var gl =
-            canvas.getContext('webgl') ||
-            canvas.getContext('experimental-webgl');
-        // Report the result.
-        if (gl && gl instanceof WebGLRenderingContext) {
-            return true;
+            // Do not use `instanceof WebGLRenderingContext` here.
+            // Firefox privacy/hardening settings and cross-realm browser
+            // implementations can make that test fail even when a perfectly
+            // usable WebGL context was returned. Three.js only needs a real
+            // context, so a truthy context is the correct capability check.
+            const gl =
+                canvas.getContext('webgl2') ||
+                canvas.getContext('webgl') ||
+                canvas.getContext('experimental-webgl');
+
+            return Boolean(gl);
+        } catch (error) {
+            console.warn('WebGL capability check failed:', error);
+            return false;
         }
-        return false;
     };
 
     return (
@@ -280,11 +287,20 @@ const LoadingScreen: React.FC<LoadingProps> = () => {
                         <div style={styles.spacer} />
                         <div style={styles.spacer} />
 
-                        <p>WebGL is required to run this site.</p>
+                        <p>WebGL is required to run the 3D workbench.</p>
                         <p>
-                            Please enable it or switch to a browser which
-                            supports WebGL
+                            Firefox can disable WebGL through hardware
+                            acceleration, privacy settings or browser
+                            configuration. The rest of the engineering
+                            portfolio remains available.
                         </p>
+                        <div style={styles.spacer} />
+                        <a
+                            style={styles.link}
+                            href="projects/aurora-vx/"
+                        >
+                            Open the engineering case studies instead
+                        </a>
                     </div>
                 </div>
             )}
