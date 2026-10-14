@@ -57,13 +57,17 @@ export default class Application {
         this.scene = new THREE.Scene();
         this.cssScene = new THREE.Scene();
         this.overlayScene = new THREE.Scene();
+
+        // Mount Henry's original React loading UI before any WebGL renderer,
+        // resource request, camera or world setup can fail. This preserves the
+        // original experience while preventing an opaque black screen.
+        this.ui = new UI();
+
         this.resources = new Resources(sources);
         this.camera = new Camera();
         this.renderer = new Renderer();
         this.camera.createControls();
         this.world = new World();
-
-        this.ui = new UI();
 
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.has('debug')) {
