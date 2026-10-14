@@ -12,6 +12,18 @@ const assets = [
   'static/textures/monitor/layers/compressed/smudges.jpg',
   'static/textures/monitor/layers/compressed/shadow-compressed.png',
   'static/textures/monitor/video/base-static.mp4',
+  'static/textures/monitor/video/static-texture-layer.mp4',
+  'static/audio/mouse/mouse_down.mp3',
+  'static/audio/mouse/mouse_up.mp3',
+  'static/audio/keyboard/key_1.mp3',
+  'static/audio/keyboard/key_2.mp3',
+  'static/audio/keyboard/key_3.mp3',
+  'static/audio/keyboard/key_4.mp3',
+  'static/audio/keyboard/key_5.mp3',
+  'static/audio/keyboard/key_6.mp3',
+  'static/audio/startup/startup.mp3',
+  'static/audio/atmosphere/office.mp3',
+  'static/audio/cc/type.mp3',
   'static/images/favicon.ico'
 ];
 
